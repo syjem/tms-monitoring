@@ -10,6 +10,15 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import useScreenSize from '@/hooks/use-screen-size';
 import { signatorySchema } from '@/lib/zod/schema';
 import { Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -37,6 +46,16 @@ export function FirstSignatoryDialog({
     name?: string;
     title?: string;
   }>({});
+
+  const { width } = useScreenSize();
+  const isInMobile = width <= 540;
+
+  const Custom = isInMobile ? Sheet : Dialog;
+  const CustomContent = isInMobile ? SheetContent : DialogContent;
+  const CustomHeader = isInMobile ? SheetHeader : DialogHeader;
+  const CustomTitle = isInMobile ? SheetTitle : DialogTitle;
+  const CustomFooter = isInMobile ? SheetFooter : DialogFooter;
+  const CustomClose = isInMobile ? SheetClose : DialogClose;
 
   useEffect(() => {
     if (!open) {
@@ -74,13 +93,16 @@ export function FirstSignatoryDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>
+    <Custom open={open} onOpenChange={setOpen}>
+      <CustomContent
+        className="max-w-full md:max-w-[425px] p-4 md:p-6"
+        side="bottom"
+      >
+        <CustomHeader className="px-0">
+          <CustomTitle>
             {!firstSignatory.name ? 'Add' : 'Edit'} Signatory
-          </DialogTitle>
-        </DialogHeader>
+          </CustomTitle>
+        </CustomHeader>
         <form onSubmit={handleSubmit}>
           <Input type="hidden" name="id" defaultValue={1} />
           <div className="grid gap-4">
@@ -128,12 +150,12 @@ export function FirstSignatoryDialog({
               </div>
             </Label>
           </div>
-          <DialogFooter className="mt-4">
-            <DialogClose asChild>
+          <CustomFooter className="mt-4 flex-col-reverse px-0">
+            <CustomClose asChild>
               <Button variant="outline" type="button">
                 Cancel
               </Button>
-            </DialogClose>
+            </CustomClose>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
@@ -144,9 +166,9 @@ export function FirstSignatoryDialog({
                 'Save'
               )}
             </Button>
-          </DialogFooter>
+          </CustomFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </CustomContent>
+    </Custom>
   );
 }

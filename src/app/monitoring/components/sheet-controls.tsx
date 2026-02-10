@@ -43,7 +43,7 @@ export function SheetControls({
   };
 
   return (
-    <div className="fixed right-4 z-99 bottom-4 print:hidden">
+    <div className="fixed right-4 top-4 md:top-auto md:bottom-4 z-99 print:hidden">
       {isEditable ? (
         <div className="flex flex-col space-y-1">
           <Tooltip>
