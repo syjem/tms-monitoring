@@ -1,3 +1,4 @@
+import { AutoFitInput } from '@/app/monitoring/components/auto-fit-input';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
@@ -132,28 +133,26 @@ export function CustomTableRow({
         />
       </TableCell>
       <TableCell className="border border-black p-1 print:py-0">
-        <input
+        <AutoFitInput
           type="text"
           value={row.destination}
           onChange={(e) =>
             updateCell(groupIndex, rowIndex, 'destination', e.target.value)
           }
           className={cn(
-            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
             isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />
       </TableCell>
       <TableCell className="border border-black p-1 print:py-0">
-        <input
+        <AutoFitInput
           type="text"
           value={row.remarks}
           onChange={(e) =>
             updateCell(groupIndex, rowIndex, 'remarks', e.target.value)
           }
           className={cn(
-            'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
             isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
