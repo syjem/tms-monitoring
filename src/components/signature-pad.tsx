@@ -155,7 +155,7 @@ function SignaturePad({
     <div className="space-y-4">
       <canvas
         id="signature-canvas"
-        className="border border-border"
+        className="w-full border border-border"
         width={width}
         height={height}
       />
