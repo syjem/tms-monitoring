@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { FileText, Save, ScanLine } from "lucide-react";
+import { cn } from '@/lib/utils';
+import { FileText, Save, ScanLine } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-type ExtractionStage = "uploading" | "extracting" | "saving";
+type ExtractionStage = 'uploading' | 'extracting' | 'saving';
 
 interface ExtractionAnimationProps {
   stage: ExtractionStage;
@@ -18,12 +18,12 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
     let max = 100;
     let speed = 5;
 
-    if (stage === "extracting") {
+    if (stage === 'extracting') {
       max = 99;
       speed = 200;
     }
 
-    if (stage === "saving") {
+    if (stage === 'saving') {
       max = 100;
       speed = 30;
     }
@@ -40,26 +40,44 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
 
   const stages = [
     {
-      id: "uploading",
-      label: "Uploading",
-      description: "Sending your PDF to the server",
+      id: 'uploading',
+      label: 'Uploading',
+      description: 'Sending your PDF to the server',
       icon: FileText,
     },
     {
-      id: "extracting",
-      label: "Extracting",
-      description: "Processing and extracting data",
+      id: 'extracting',
+      label: 'Extracting',
+      description: 'Processing and extracting data',
       icon: ScanLine,
     },
     {
-      id: "saving",
-      label: "Saving",
-      description: "Saving the extracted data",
+      id: 'saving',
+      label: 'Saving',
+      description: 'Saving the extracted data',
       icon: Save,
     },
   ] as const;
 
   const currentStageIndex = stages.findIndex((s) => s.id === stage);
+
+  const extractStageStyle = {
+    uploading: {
+      container: 'border-cyan-500/20 bg-cyan-500/5',
+      pulse: 'bg-cyan-400/20',
+      text: 'text-cyan-700 dark:text-cyan-300',
+    },
+    extracting: {
+      container: 'border-amber-500/20 bg-amber-500/5',
+      pulse: 'bg-amber-400/20',
+      text: 'text-amber-700 dark:text-amber-300',
+    },
+    saving: {
+      container: 'border-emerald-500/20 bg-emerald-500/5',
+      pulse: 'bg-emerald-400/20',
+      text: 'text-emerald-700 dark:text-emerald-300',
+    },
+  }[stage];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
@@ -86,12 +104,12 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
                 {index < stages.length - 1 && (
                   <div
                     className={cn(
-                      "absolute left-5 top-12 h-12 w-0.5 transition-colors duration-500",
+                      'absolute left-5 top-12 h-12 w-0.5 transition-colors duration-500',
                       isCompleted
-                        ? "bg-primary"
+                        ? 'bg-primary'
                         : isActive
-                        ? "bg-primary/50"
-                        : "bg-muted"
+                          ? 'bg-primary/50'
+                          : 'bg-muted',
                     )}
                   />
                 )}
@@ -100,16 +118,16 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
                   {/* Icon Circle */}
                   <div
                     className={cn(
-                      "relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-500",
+                      'relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-500',
                       isCompleted
-                        ? "bg-primary text-white"
+                        ? 'bg-primary text-white'
                         : isActive
-                        ? "animate-in bg-primary text-white shadow-lg shadow-primary/50"
-                        : "bg-muted text-muted-foreground"
+                          ? 'animate-in bg-primary text-white shadow-lg shadow-primary/50'
+                          : 'bg-muted text-muted-foreground',
                     )}
                   >
                     <Icon
-                      className={cn("h-5 w-5", isActive && "animate-pulse")}
+                      className={cn('h-5 w-5', isActive && 'animate-pulse')}
                     />
                   </div>
 
@@ -118,10 +136,10 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
                     <div className="flex items-center justify-between">
                       <h3
                         className={cn(
-                          "font-semibold transition-colors",
+                          'font-semibold transition-colors',
                           isActive || isCompleted
-                            ? "text-foreground"
-                            : "text-muted-foreground"
+                            ? 'text-foreground'
+                            : 'text-muted-foreground',
                         )}
                       >
                         {stageItem.label}
@@ -158,11 +176,27 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
         </div>
 
         {/* Footer Message */}
-        <div className="rounded-md bg-muted/50 p-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            {stage === "uploading" && "Uploading your file securely..."}
-            {stage === "extracting" && "Analyzing PDF content..."}
-            {stage === "saving" && "Almost there!"}
+        <div
+          className={cn(
+            'relative overflow-hidden rounded-md border p-4 text-center',
+            extractStageStyle.container,
+          )}
+        >
+          <div
+            className={cn(
+              'pointer-events-none absolute inset-y-0 -right-1/2 w-1/2 rounded-md opacity-60',
+              extractStageStyle.pulse,
+            )}
+            style={{
+              animation: 'extracting-shimmer 2.2s linear infinite',
+              filter: 'blur(24px)',
+            }}
+          />
+          <p className={cn('relative text-sm', extractStageStyle.text)}>
+            {stage === 'uploading' && 'Uploading your file securely...'}
+            {stage === 'extracting' &&
+              'Analyzing and extracting PDF content...'}
+            {stage === 'saving' && 'Almost there!'}
           </p>
         </div>
       </div>

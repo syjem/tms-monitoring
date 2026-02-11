@@ -195,3 +195,12 @@
     -webkit-clip-path: none;
   }
 }
+
+@keyframes extracting-shimmer {
+  0% {
+    transform: translateX(-320%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
