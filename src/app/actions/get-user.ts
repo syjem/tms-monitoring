@@ -1,32 +1,28 @@
 'use server';
 
+import { AuthActionError } from '@/lib/errors/auth-action-error';
 import { createClient } from '@/lib/supabase/server';
-import { redirect } from 'next/navigation';
+import type { User } from '@supabase/supabase-js';
 
 /**
  * Retrieves the currently authenticated user from Supabase.
  *
- * This function validates the user's authentication claims and returns their user details.
+ * This function validates authentication and returns user details.
  * It must be called from a server context only (marked with 'use server').
  *
  * @async
  * @returns {Promise<User>} The authenticated user object
- * @redirect to /auth/login page If there's an error retrieving claims or user data
+ * @throws {AuthActionError} If authentication fails or no user is available
  *
  * @example
  * const user = await getUser();
  * console.log(user.email);
  *
  */
-export async function getUser() {
+export async function getUser(): Promise<User> {
   const supabase = await createClient();
-  const { error } = await supabase.auth.getClaims();
-
-  if (error) redirect('/auth/login');
-
-  const { data } = await supabase.auth.getUser();
-
-  if (!data.user) redirect('/auth/login');
+  const { data, error } = await supabase.auth.getUser();
+  if (error || !data.user) throw new AuthActionError();
 
   return data.user;
 }

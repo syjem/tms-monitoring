@@ -11,7 +11,6 @@ export async function createLog(period: string, logs: AttendanceData) {
   if (!period || !logs) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
 
   const user = await getUser();
-  if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
   const controller = new WorkLogsController(db);
   const createdLog = await controller.createLog(user.id, period, logs);

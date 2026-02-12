@@ -10,7 +10,6 @@ import { withErrorHandler } from '@/utils/with-error-handler';
 export async function setSignatories(signatories: unknown) {
   const result = await withErrorHandler(async () => {
     const user = await getUser();
-    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
     // Zod validation
     const parsed = signatoriesSchema.safeParse(signatories);

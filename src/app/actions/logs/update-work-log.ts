@@ -12,7 +12,6 @@ export async function updateWorkLog(id: string, logs: AttendanceData) {
     if (!id || !logs) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
 
     const user = await getUser();
-    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
     const controller = new WorkLogsController(db);
     const result = await controller.updateLogById(id, user.id, logs);

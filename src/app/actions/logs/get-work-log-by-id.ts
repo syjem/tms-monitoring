@@ -11,7 +11,6 @@ export async function getWorkLogById(id: string) {
   if (!id) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
 
   const user = await getUser();
-  if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
   const controller = new WorkLogsController(db);
   const workLog = await controller.getLogById(id, user.id);

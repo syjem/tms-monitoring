@@ -12,7 +12,6 @@ export async function deleteWorkLog(id: string) {
     if (!id) throw new Error(ERRORS.MISSING_REQUIRED_FIELD);
 
     const user = await getUser();
-    if (!user) throw new Error(ERRORS.UNAUTHORIZED);
 
     const controller = new WorkLogsController(db);
     const result = await controller.deleteLogById(id, user.id);
