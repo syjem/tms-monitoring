@@ -1,6 +1,7 @@
 'use client';
 
 import { deleteWorkLog } from '@/app/actions/logs/delete-work-log';
+import { ERRORS } from '@/constants/errors';
 import { EmptyFileManager } from '@/components/file-manager-empty';
 import {
   AlertDialog,
@@ -55,10 +56,16 @@ function FileManager({ logs }: { logs: WorkLog[] }) {
     });
 
     try {
-      const { success } = await deleteWorkLog(id);
+      const result = await deleteWorkLog(id);
 
-      if (!success) {
-        throw new Error('Not allowed to delete this log');
+      if (!result.success) {
+        if (result.error.code === 'UNAUTHORIZED') {
+          toast.error(ERRORS.SESSION_EXPIRED, { id: toastId });
+          router.replace('/auth/login');
+          return;
+        }
+
+        throw new Error(result.error.message || ERRORS.NOT_ALLOWED);
       }
 
       toast.success('Log deleted successfully', {

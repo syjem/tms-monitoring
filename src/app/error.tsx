@@ -21,7 +21,7 @@ export default function Error({
           {authError ? 'Session expired' : 'Something went wrong!'}
         </h2>
         <p className="mb-6 text-gray-600">
-          {error.message || 'Failed to load the work log'}
+          {error.message || 'An unexpected error occurred'}
         </p>
         <div className="flex gap-4 justify-center">
           {authError ? (
