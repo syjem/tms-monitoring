@@ -10,14 +10,6 @@ export async function AttendanceSheetServer({ id }: { id: string }) {
     getSignatories(),
   ]);
 
-  if (!signature.success) {
-    throw new Error(signature.error.message);
-  }
-
-  if (!signatories.success) {
-    throw new Error(signatories.error.message);
-  }
-
   return (
     <AttendanceSheet
       workLog={workLog}
