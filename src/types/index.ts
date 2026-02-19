@@ -6,7 +6,6 @@ export interface AttendanceRow {
   timeOut: string;
   destination: string;
   remarks: string;
-  signature: string;
 }
 
 export type AttendanceGroup = AttendanceRow[];

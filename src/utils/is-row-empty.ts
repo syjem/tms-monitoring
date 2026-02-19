@@ -8,7 +8,6 @@ export const isRowEmpty = (row: AttendanceRow): boolean => {
     row.timeIn === '' &&
     row.timeOut === '' &&
     row.destination === '' &&
-    row.remarks === '' &&
-    row.signature === ''
+    row.remarks === ''
   );
 };

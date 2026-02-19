@@ -21,7 +21,6 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           timeOut: '',
           destination: '',
           remarks: log.Remarks,
-          signature: '',
         },
       ]);
     } else {
@@ -37,7 +36,6 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           timeOut: formatTimeTo12Hour(log.BreakOut),
           destination: 'OFFICE',
           remarks: log.Remarks || 'DUTY ON CALL',
-          signature: '',
         },
         {
           date: '',
@@ -47,7 +45,6 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           timeOut: formatTimeTo12Hour(log.TimeOut),
           destination: 'OFFICE',
           remarks: log.Remarks || 'DUTY ON CALL',
-          signature: '',
         },
       ]);
     }
@@ -69,7 +66,6 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
         timeOut: '',
         destination: '',
         remarks: '',
-        signature: '',
       },
     ]);
   }
