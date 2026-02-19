@@ -2,11 +2,8 @@
 
 import { extractTextFromPDF } from '@/app/actions/extract-pdf';
 import { createLog } from '@/app/actions/logs/create-log';
-import { ERRORS } from '@/constants/errors';
-import { isAuthError } from '@/utils/is-auth-error';
 import { isNextRedirectError } from '@/utils/is-next-redirect-error';
 import { processLogs } from '@/utils/process-logs';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import {
   type FileError,
@@ -31,7 +28,6 @@ type UsePDFExtractOptions = {
 type ExtractionStage = 'uploading' | 'extracting' | 'saving' | null;
 
 export const usePDFExtract = (options: UsePDFExtractOptions) => {
-  const router = useRouter();
   const {
     allowedMimeTypes = ['application/pdf'],
     maxFileSize = Number.POSITIVE_INFINITY,
@@ -108,11 +104,6 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
       await createLog(period, processedLogs);
     } catch (error: unknown) {
       if (isNextRedirectError(error)) return;
-      if (error instanceof Error && isAuthError(error.message)) {
-        toast.error(ERRORS.SESSION_EXPIRED);
-        router.replace('/auth/login');
-        return;
-      }
 
       toast.error(
         error instanceof Error
@@ -122,7 +113,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     } finally {
       setLoading(false);
     }
-  }, [files, router]);
+  }, [files]);
 
   useEffect(() => {
     if (files.length === 0) {

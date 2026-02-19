@@ -1,7 +1,6 @@
 'use client';
 
 import { deleteWorkLog } from '@/app/actions/logs/delete-work-log';
-import { ERRORS } from '@/constants/errors';
 import { EmptyFileManager } from '@/components/file-manager-empty';
 import {
   AlertDialog,
@@ -30,6 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { ERRORS } from '@/constants/errors';
 import { WorkLog } from '@/lib/supabase/schema';
 import { cn } from '@/lib/utils';
 import { formatISODate } from '@/utils/format-date';
@@ -59,12 +59,6 @@ function FileManager({ logs }: { logs: WorkLog[] }) {
       const result = await deleteWorkLog(id);
 
       if (!result.success) {
-        if (result.error.code === 'UNAUTHORIZED') {
-          toast.error(ERRORS.SESSION_EXPIRED, { id: toastId });
-          router.replace('/auth/login');
-          return;
-        }
-
         throw new Error(result.error.message || ERRORS.NOT_ALLOWED);
       }
 

@@ -1,5 +1,3 @@
-import { isAuthActionError } from '@/lib/errors/auth-action-error';
-
 /**
  * Type-safe error response wrapper
  */
@@ -77,13 +75,8 @@ export async function withErrorHandler<
       data,
     };
   } catch (error) {
-    if (isNextControlFlowError(error)) throw error;
-
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error occurred';
-    const errorCode = isAuthActionError(error)
-      ? error.code
-      : options?.errorCode;
 
     const errorDetails = options?.errorTransform
       ? options.errorTransform(error)
@@ -93,22 +86,8 @@ export async function withErrorHandler<
       success: false,
       error: {
         message: errorMessage,
-        code: errorCode,
         details: errorDetails,
       },
     };
   }
-}
-
-function isNextControlFlowError(error: unknown) {
-  if (!error || typeof error !== 'object') return false;
-  if (!('digest' in error)) return false;
-
-  const digest = (error as { digest?: unknown }).digest;
-  if (typeof digest !== 'string') return false;
-
-  return (
-    digest.startsWith('NEXT_REDIRECT') ||
-    digest.startsWith('NEXT_HTTP_ERROR_FALLBACK')
-  );
 }

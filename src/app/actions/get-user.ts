@@ -1,6 +1,6 @@
 'use server';
 
-import { AuthActionError } from '@/lib/errors/auth-action-error';
+import { ERRORS } from '@/constants/errors';
 import { createClient } from '@/lib/supabase/server';
 import type { User } from '@supabase/supabase-js';
 
@@ -12,7 +12,7 @@ import type { User } from '@supabase/supabase-js';
  *
  * @async
  * @returns {Promise<User>} The authenticated user object
- * @throws {AuthActionError} If authentication fails or no user is available
+ * @throws {Error} If authentication fails or no user is available
  *
  * @example
  * const user = await getUser();
@@ -22,7 +22,7 @@ import type { User } from '@supabase/supabase-js';
 export async function getUser(): Promise<User> {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user) throw new AuthActionError();
+  if (error || !data.user) throw new Error(ERRORS.UNAUTHORIZED);
 
   return data.user;
 }
