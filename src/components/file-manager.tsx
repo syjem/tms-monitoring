@@ -2,6 +2,7 @@
 
 import { deleteWorkLog } from '@/app/actions/logs/delete-work-log';
 import { EmptyFileManager } from '@/components/file-manager-empty';
+import { LogsLoader } from '@/components/skeletons/LogsLoader';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -107,10 +108,7 @@ function FileManager({
       />
 
       {isLoading && logs.length === 0 ? (
-        <div className="flex min-h-[200px] items-center justify-center gap-2 text-sm text-muted-foreground">
-          <Loader className="h-4 w-4 animate-spin" />
-          Loading work logs...
-        </div>
+        <LogsLoader />
       ) : error && logs.length === 0 ? (
         <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 p-6 text-center">
           <p className="text-sm text-muted-foreground">{error}</p>

@@ -53,6 +53,11 @@ export function TabsSection() {
   }, [currentTab]);
 
   useEffect(() => {
+    if (tab !== 'files' || hasLoadedLogs) return;
+    void loadLogs();
+  }, [tab, hasLoadedLogs, loadLogs]);
+
+  useEffect(() => {
     // Start loading Files data in idle time
     if (hasLoadedLogs) return;
 
@@ -91,6 +96,10 @@ export function TabsSection() {
     });
   };
 
+  // Avoid flash of empty state
+  const shouldShowLogsLoading =
+    isLogsLoading || (tab === 'files' && !hasLoadedLogs && !logsError);
+
   return (
     <section className="mt-6 max-w-xl mx-auto px-4">
       <Tabs value={tab} onValueChange={handleTabChange}>
@@ -114,7 +123,7 @@ export function TabsSection() {
         <TabsContent value="files">
           <FileManager
             logs={logs}
-            isLoading={isLogsLoading}
+            isLoading={shouldShowLogsLoading}
             error={logsError}
             onRefreshLogs={async () => {
               await loadLogs(true);
