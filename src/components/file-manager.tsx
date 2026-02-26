@@ -29,7 +29,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ERRORS } from '@/constants/errors';
-import { WorkLog } from '@/lib/supabase/schema';
 import { cn } from '@/lib/utils';
 import { formatISODate } from '@/utils/format-date';
 import { CheckCheck, CircleAlert, Ellipsis, Loader } from 'lucide-react';
@@ -38,7 +37,15 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-function FileManager({ logs }: { logs: WorkLog[] }) {
+type FileManagerProps = {
+  logs: {
+    id: string;
+    period: string;
+    updated_at: Date;
+  }[];
+};
+
+function FileManager({ logs }: FileManagerProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
