@@ -3,7 +3,6 @@ import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
 import { Header } from '@/components/header';
 import { HeaderSkeleton } from '@/components/skeletons/header-skeleton';
 import { HeroSectionSkeleton } from '@/components/skeletons/hero-section';
-import { TabsSectionSkeleton } from '@/components/skeletons/tab-section-skeleton';
 import { TabsSection } from '@/components/tabs-section';
 import React, { Suspense } from 'react';
 
@@ -17,7 +16,7 @@ export default async function Home() {
       <Suspense fallback={<HeroSectionSkeleton />}>
         <HeroSection />
       </Suspense>
-      <Suspense fallback={<TabsSectionSkeleton />}>
+      <Suspense>
         <TabsSection />
       </Suspense>
       <BackgroundBottom />
