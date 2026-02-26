@@ -30,7 +30,11 @@ export class WorkLogsController {
 
   async getLogsByUserId(user_id: string) {
     const work_logs = await this.db
-      .select()
+      .select({
+        id: workLogs.id,
+        period: workLogs.period,
+        updated_at: workLogs.updated_at,
+      })
       .from(workLogs)
       .where(eq(workLogs.user_id, user_id))
       .orderBy(desc(workLogs.updated_at));
