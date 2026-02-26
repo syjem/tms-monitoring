@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export function TabSectionSkeleton() {
+export function TabsSectionSkeleton() {
   return (
     <section className="mt-6 max-w-xl mx-auto px-4">
       <Tabs defaultValue="upload">

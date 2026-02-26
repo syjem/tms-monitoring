@@ -12,6 +12,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +34,6 @@ import { cn } from '@/lib/utils';
 import { formatISODate } from '@/utils/format-date';
 import { CheckCheck, CircleAlert, Ellipsis, Loader } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -41,12 +41,19 @@ type FileManagerProps = {
   logs: {
     id: string;
     period: string;
-    updated_at: Date;
+    updated_at: Date | string;
   }[];
+  isLoading?: boolean;
+  error?: string | null;
+  onRefreshLogs?: () => Promise<void>;
 };
 
-function FileManager({ logs }: FileManagerProps) {
-  const router = useRouter();
+function FileManager({
+  logs,
+  isLoading = false,
+  error = null,
+  onRefreshLogs,
+}: FileManagerProps) {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -72,7 +79,7 @@ function FileManager({ logs }: FileManagerProps) {
         id: toastId,
         icon: <CheckCheck className="h-4 w-4" />,
       });
-      router.refresh();
+      if (onRefreshLogs) await onRefreshLogs();
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -99,7 +106,24 @@ function FileManager({ logs }: FileManagerProps) {
         deleteLogHandler={deleteLogHandler}
       />
 
-      {logs && logs.length === 0 ? (
+      {isLoading && logs.length === 0 ? (
+        <div className="flex min-h-[200px] items-center justify-center gap-2 text-sm text-muted-foreground">
+          <Loader className="h-4 w-4 animate-spin" />
+          Loading work logs...
+        </div>
+      ) : error && logs.length === 0 ? (
+        <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 p-6 text-center">
+          <p className="text-sm text-muted-foreground">{error}</p>
+          <Button
+            variant="outline"
+            onClick={() => {
+              void onRefreshLogs?.();
+            }}
+          >
+            Try again
+          </Button>
+        </div>
+      ) : logs.length === 0 ? (
         <EmptyFileManager visible={visible} />
       ) : (
         <div
@@ -123,7 +147,7 @@ function FileManager({ logs }: FileManagerProps) {
                     {log.period}
                   </TableCell>
                   <TableCell className="font-medium text-muted-foreground">
-                    {formatISODate(log.updated_at)}
+                    {formatISODate(new Date(log.updated_at))}
                   </TableCell>
 
                   <TableCell className="flex items-center justify-center rounded-full p-2">
