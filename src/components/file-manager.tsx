@@ -23,7 +23,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -85,7 +84,7 @@ function FileManager({ logs }: { logs: WorkLog[] }) {
   };
 
   return (
-    <section className="rounded-lg border-2 border-dashed bg-white transition-all duration-500 border-gray-300 hover:border-gray-400 hover:shadow-md">
+    <section className="max-h-[350px] rounded-lg border-2 border-dashed bg-white transition-all duration-500 border-gray-300 hover:border-gray-400 hover:shadow-md overflow-auto">
       <DeleteAlertDialog
         open={open}
         setOpen={alertHandler}
@@ -103,7 +102,6 @@ function FileManager({ logs }: { logs: WorkLog[] }) {
           )}
         >
           <Table>
-            <TableCaption>Your recent logs</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[200px] font-bold">From — To</TableHead>
