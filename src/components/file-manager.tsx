@@ -133,7 +133,7 @@ function FileManager({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[200px] font-bold">From — To</TableHead>
+                <TableHead className="w-[200px] font-bold">Period</TableHead>
                 <TableHead className="font-bold">Last modified</TableHead>
                 <TableHead className="sr-only">Actions</TableHead>
               </TableRow>
