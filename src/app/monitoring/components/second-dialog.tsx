@@ -24,13 +24,7 @@ import { Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import z from 'zod';
 
-export function SecondSignatoryDialog({
-  open,
-  setOpen,
-  onSubmit,
-  isSubmitting,
-  secondSignatory,
-}: {
+type SecondSignatoryDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   onSubmit: (data: {
@@ -41,7 +35,15 @@ export function SecondSignatoryDialog({
   }) => Promise<void>;
   isSubmitting: boolean;
   secondSignatory: { name: string; title: string; includeSignature: boolean };
-}) {
+};
+
+export function SecondSignatoryDialog({
+  open,
+  setOpen,
+  onSubmit,
+  isSubmitting,
+  secondSignatory,
+}: SecondSignatoryDialogProps) {
   const [errors, setErrors] = useState<{
     name?: string;
     title?: string;

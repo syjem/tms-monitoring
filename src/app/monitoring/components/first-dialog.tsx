@@ -24,13 +24,7 @@ import { Loader } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import z from 'zod';
 
-export function FirstSignatoryDialog({
-  open,
-  setOpen,
-  onSubmit,
-  isSubmitting,
-  firstSignatory,
-}: {
+type FirstSignatoryDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   onSubmit: (data: {
@@ -41,7 +35,15 @@ export function FirstSignatoryDialog({
   }) => Promise<void>;
   isSubmitting: boolean;
   firstSignatory: { name: string; title: string; includeSignature: boolean };
-}) {
+};
+
+export function FirstSignatoryDialog({
+  open,
+  setOpen,
+  onSubmit,
+  isSubmitting,
+  firstSignatory,
+}: FirstSignatoryDialogProps) {
   const [errors, setErrors] = useState<{
     name?: string;
     title?: string;
