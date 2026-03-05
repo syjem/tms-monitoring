@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import {
@@ -21,7 +22,7 @@ import { useElementSize } from '@/hooks/use-element-size';
 
 import useScreenSize from '@/hooks/use-screen-size';
 import { OperationResult } from '@/utils/with-error-handler';
-import { DialogProps, DialogTitle } from '@radix-ui/react-dialog';
+import { DialogProps } from '@radix-ui/react-dialog';
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
@@ -130,8 +131,8 @@ function SignatureMenu({
               {isFetching
                 ? 'Loading signature details...'
                 : data?.success && data?.data
-                ? 'Manage your signature!'
-                : 'Create your signature here!'}
+                  ? 'Manage your signature!'
+                  : 'Create your signature here!'}
             </CompDescription>
           </CompHeader>
           <div className="p-4 pt-0 md:p-0 w-full" ref={ref}>
