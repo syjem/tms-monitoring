@@ -209,7 +209,7 @@ export const Signatories = ({
           <div
             onClick={handleAddFirstSignatory}
             className={cn(
-              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
+              'group relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -218,13 +218,13 @@ export const Signatories = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100"
+                className="opacity-0 group-hover:opacity-100 transition-opacity size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemoveFirstSignatory();
                 }}
               >
-                <X className="text-red-500" />
+                <X />
               </Button>
             )}
 
@@ -271,7 +271,7 @@ export const Signatories = ({
           <div
             onClick={handleAddSecondSignatory}
             className={cn(
-              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
+              'group relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -280,13 +280,13 @@ export const Signatories = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100"
+                className="opacity-0 group-hover:opacity-100 transition-opacity size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemoveSecondSignatory();
                 }}
               >
-                <X className="text-red-500" />
+                <X />
               </Button>
             )}
 
