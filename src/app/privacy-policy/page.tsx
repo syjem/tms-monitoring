@@ -7,10 +7,6 @@ export default function PrivacyPage() {
     <main className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="mb-6 text-3xl font-bold">Privacy Policy</h1>
 
-      <p className="mb-4 text-sm text-muted-foreground">
-        Effective Date: 1/14/2026
-      </p>
-
       <section className="space-y-2">
         <p>
           The TMS Employee Monitoring application (“the App”) is an
