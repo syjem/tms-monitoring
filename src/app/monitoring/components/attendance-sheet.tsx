@@ -138,6 +138,29 @@ export default function AttendanceSheet({
     }
   };
 
+  useEffect(() => {
+    const handleKeyboardShortcuts = (event: KeyboardEvent) => {
+      if (!isEditable) return;
+
+      const isModifierPressed = event.ctrlKey || event.metaKey;
+      if (!isModifierPressed) return;
+
+      const key = event.key.toLowerCase();
+
+      if (key === 'p') {
+        event.preventDefault();
+        toast.warning('Printing is disabled while on edit mode.');
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyboardShortcuts);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyboardShortcuts);
+    };
+  }, [isEditable]);
+
   const enableEditing = () => {
     setIsEditable(true);
     toast.warning('Edit mode enabled', {
