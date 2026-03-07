@@ -8,6 +8,12 @@ export interface AttendanceRow {
   remarks: string;
 }
 
+export type AttendancePageRow = {
+  groupIndex: number;
+  rowIndex: number;
+  row: AttendanceRow;
+};
+
 export type AttendanceGroup = AttendanceRow[];
 export type AttendanceData = AttendanceGroup[]; // two dimensional array
 

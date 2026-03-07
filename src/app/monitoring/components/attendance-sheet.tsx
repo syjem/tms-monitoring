@@ -1,15 +1,26 @@
 'use client';
 
 import { updateWorkLog } from '@/app/actions/logs/update-work-log';
+import { ROWS_PER_PAGE } from '@/app/monitoring/_constants';
+import {
+  cloneAttendanceData,
+  countRows,
+  countTrailingEmptySingleGroups,
+  createEmptyGroup,
+  createEmptyRow,
+  padToFullPages,
+} from '@/app/monitoring/_utils';
+import AddPage from '@/app/monitoring/components/add-page';
 import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sheet-header';
 import AttendanceSheetTable from '@/app/monitoring/components/attendance-sheet-table';
 import { SheetControls } from '@/app/monitoring/components/sheet-controls';
 import { Signatories } from '@/app/monitoring/components/signatories';
-import type { AttendanceData, AttendanceRow } from '@/types';
-import { isRowEmpty } from '@/utils/is-row-empty';
+import { SignatoriesPreview } from '@/app/monitoring/components/signatories-preview';
+import { cn } from '@/lib/utils';
+import type { AttendanceData, AttendancePageRow, AttendanceRow } from '@/types';
 import { OperationResult } from '@/utils/with-error-handler';
 import { Edit } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 type AttendanceSheetProps = {
@@ -37,25 +48,49 @@ export default function AttendanceSheet({
   const [isEditable, setIsEditable] = useState(false);
   const [hoveredGroup, setHoveredGroup] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [activePage, setActivePage] = useState(0);
 
   const [attendanceData, setAttendanceData] = useState<AttendanceData>(() => {
     if (workLog.id && workLog.logs && workLog.logs.length > 0) {
-      return workLog.logs;
+      return padToFullPages(workLog.logs);
     }
-    // Default empty groups if no initial data - 40 single-row
-    return Array.from({ length: 40 }, () => [
-      {
-        date: '',
-        day: '',
-        sched: '',
-        timeIn: '',
-        timeOut: '',
-        destination: '',
-        remarks: '',
-        signature: '',
-      },
-    ]);
+
+    return Array.from({ length: ROWS_PER_PAGE }, () => createEmptyGroup());
   });
+
+  const totalRows = useMemo(() => countRows(attendanceData), [attendanceData]);
+
+  const pageCount = useMemo(
+    () => Math.max(1, Math.ceil(totalRows / ROWS_PER_PAGE)),
+    [totalRows],
+  );
+
+  const pagedRows = useMemo(() => {
+    const pages: AttendancePageRow[][] = Array.from(
+      { length: pageCount },
+      () => [],
+    );
+
+    let rowCounter = 0;
+
+    attendanceData.forEach((group, groupIndex) => {
+      group.forEach((row, rowIndex) => {
+        const pageIndex = Math.floor(rowCounter / ROWS_PER_PAGE);
+        pages[pageIndex].push({
+          groupIndex,
+          rowIndex,
+          row,
+        });
+        rowCounter++;
+      });
+    });
+
+    return pages;
+  }, [attendanceData, pageCount]);
+
+  useEffect(() => {
+    setActivePage((prev) => Math.min(prev, pageCount - 1));
+  }, [pageCount]);
 
   const updateCell = (
     groupIndex: number,
@@ -113,65 +148,63 @@ export default function AttendanceSheet({
   const addRowToGroup = (groupIndex: number) => {
     if (!isEditable) return;
 
-    // Count non-empty rows across all groups
-    const nonEmptyRowsCount = attendanceData.reduce((total, group) => {
-      return total + group.filter((row) => !isRowEmpty(row)).length;
-    }, 0);
-
-    // Check if we're at capacity (all 40 rows filled with data)
-    if (nonEmptyRowsCount >= 40) {
-      toast.error('Cannot add row - all 40 rows are filled with data');
-      return;
-    }
-
-    // Find empty groups at the end to remove
-    let emptyGroupsFromEnd = 0;
-    for (let i = attendanceData.length - 1; i >= 0; i--) {
-      const group = attendanceData[i];
-      if (group.length === 1 && isRowEmpty(group[0])) {
-        emptyGroupsFromEnd++;
-      } else {
-        break;
-      }
-    }
-
-    if (emptyGroupsFromEnd === 0) {
-      toast.error('Cannot add row - no empty rows available to remove');
-      return;
-    }
-
-    // copy of previous data for undo
     const prevData = structuredClone(attendanceData);
+    const prevPage = activePage;
+    let createdNewPage = false;
 
-    // update the state
     setAttendanceData((prev) => {
-      const newData = [...prev];
+      const nextData = cloneAttendanceData(prev);
+      const hasTrailingEmptyGroups = countTrailingEmptySingleGroups(prev) > 0;
 
-      // Add completely empty row to the specified group
-      newData[groupIndex] = [
-        ...newData[groupIndex],
-        {
-          date: '',
-          day: '',
-          sched: '',
-          timeIn: '',
-          timeOut: '',
-          destination: '',
-          remarks: '',
-        },
-      ];
+      if (!hasTrailingEmptyGroups) {
+        createdNewPage = true;
+        nextData.push(
+          ...Array.from({ length: ROWS_PER_PAGE }, () => createEmptyGroup()),
+        );
+      }
 
-      // Remove one empty group from the end to maintain 40 total rows
-      newData.pop();
+      nextData[groupIndex] = [...nextData[groupIndex], createEmptyRow()];
 
-      return newData;
+      nextData.pop();
+
+      return nextData;
     });
-    toast.info('You added a row..', {
+
+    if (createdNewPage) {
+      setActivePage(pageCount);
+    }
+
+    toast.success('Added a new row.', {
       action: {
         label: 'Undo',
         onClick: () => {
           setAttendanceData(prevData);
-          toast.info('Row removed');
+          setActivePage(prevPage);
+          toast.warning('Row removed');
+        },
+      },
+    });
+  };
+
+  const addPage = () => {
+    if (!isEditable) return;
+
+    const prevData = structuredClone(attendanceData);
+    const prevPage = activePage;
+
+    setAttendanceData((prev) => [
+      ...prev,
+      ...Array.from({ length: ROWS_PER_PAGE }, () => createEmptyGroup()),
+    ]);
+
+    setActivePage(pageCount);
+    toast.success('Added a new page.', {
+      action: {
+        label: 'Undo',
+        onClick: () => {
+          setAttendanceData(prevData);
+          setActivePage(prevPage);
+          toast.warning('Page removed');
         },
       },
     });
@@ -179,7 +212,13 @@ export default function AttendanceSheet({
 
   return (
     <main className="min-h-screen bg-white px-8 py-8 md:py-16 shadow-lg print:shadow-none print:px-4 print:py-12">
-      <AttendanceSheetHeader />
+      <AddPage
+        activePage={activePage}
+        pageCount={pageCount}
+        setActivePage={setActivePage}
+        addPage={addPage}
+        isEditable={isEditable}
+      />
 
       <SheetControls
         isSaving={isSaving}
@@ -189,23 +228,44 @@ export default function AttendanceSheet({
         signature={signature}
       />
 
-      <div className="mb-4 mx-auto max-w-4xl print:max-w-[700px]">
-        <AttendanceSheetTable
-          attendanceData={attendanceData}
-          hoveredGroup={hoveredGroup}
-          isEditable={isEditable}
-          setHoveredGroup={setHoveredGroup}
-          updateCell={updateCell}
-          addRowToGroup={addRowToGroup}
-          signature={signature}
-        />
-      </div>
+      <div className="mx-auto max-w-4xl space-y-8 print:max-w-[700px] print:space-y-0">
+        {pagedRows.map((rows, pageIndex) => (
+          <section
+            key={`sheet-page-${pageIndex + 1}`}
+            className={cn(
+              'attendance-sheet-page',
+              pageIndex === activePage ? 'block' : 'hidden',
+              'print:block',
+            )}
+          >
+            <AttendanceSheetHeader />
 
-      <Signatories
-        isEditable={isEditable}
-        signature={signature}
-        signatories={signatories}
-      />
+            <AttendanceSheetTable
+              rows={rows}
+              hoveredGroup={hoveredGroup}
+              isEditable={isEditable && activePage === pageIndex}
+              setHoveredGroup={setHoveredGroup}
+              updateCell={updateCell}
+              addRowToGroup={addRowToGroup}
+              signature={signature}
+            />
+
+            {/* Keep only one interactive Signatories instance mounted at a time. */}
+            {pageIndex === activePage ? (
+              <Signatories
+                isEditable={isEditable}
+                signature={signature}
+                signatories={signatories}
+              />
+            ) : (
+              <SignatoriesPreview
+                signature={signature}
+                signatories={signatories}
+              />
+            )}
+          </section>
+        ))}
+      </div>
     </main>
   );
 }

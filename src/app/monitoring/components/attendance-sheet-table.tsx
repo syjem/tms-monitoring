@@ -1,13 +1,13 @@
 import { CustomTableHead } from '@/app/monitoring/components/table-head';
 import { CustomTableRow } from '@/app/monitoring/components/table-row';
 import { Table, TableBody } from '@/components/ui/table';
-import type { AttendanceData, AttendanceRow } from '@/types';
+import type { AttendancePageRow, AttendanceRow } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';
 import { OperationResult } from '@/utils/with-error-handler';
 import { SetStateAction } from 'react';
 
 type AttendanceSheetTableProps = {
-  attendanceData: AttendanceData;
+  rows: AttendancePageRow[];
   hoveredGroup: number | null;
   isEditable: boolean;
   updateCell: (
@@ -25,7 +25,7 @@ type AttendanceSheetTableProps = {
 };
 
 function AttendanceSheetTable({
-  attendanceData,
+  rows,
   hoveredGroup,
   isEditable,
   setHoveredGroup,
@@ -34,33 +34,31 @@ function AttendanceSheetTable({
   signature,
 }: AttendanceSheetTableProps) {
   return (
-    <Table className="text-xs">
+    <Table className="text-xs mb-4">
       <CustomTableHead />
       <TableBody>
-        {attendanceData.map((group, groupIndex) =>
-          group.map((row, rowIndex) => {
-            const isHighlighted = hoveredGroup === groupIndex;
-            const isFirstRowInGroup = rowIndex === 0;
-            const isRowNotEmpty = !isRowEmpty(row);
+        {rows.map(({ groupIndex, row, rowIndex }) => {
+          const isHighlighted = hoveredGroup === groupIndex;
+          const isFirstRowInGroup = rowIndex === 0;
+          const isRowNotEmpty = !isRowEmpty(row);
 
-            return (
-              <CustomTableRow
-                key={groupIndex - rowIndex}
-                groupIndex={groupIndex}
-                row={row}
-                rowIndex={rowIndex}
-                isEditable={isEditable}
-                isHighlighted={isHighlighted}
-                isFirstRowInGroup={isFirstRowInGroup}
-                isRowNotEmpty={isRowNotEmpty}
-                setHoveredGroup={setHoveredGroup}
-                addRowToGroup={addRowToGroup}
-                updateCell={updateCell}
-                signature={signature}
-              />
-            );
-          }),
-        )}
+          return (
+            <CustomTableRow
+              key={`${groupIndex}-${rowIndex}`}
+              groupIndex={groupIndex}
+              row={row}
+              rowIndex={rowIndex}
+              isEditable={isEditable}
+              isHighlighted={isHighlighted}
+              isFirstRowInGroup={isFirstRowInGroup}
+              isRowNotEmpty={isRowNotEmpty}
+              setHoveredGroup={setHoveredGroup}
+              addRowToGroup={addRowToGroup}
+              updateCell={updateCell}
+              signature={signature}
+            />
+          );
+        })}
       </TableBody>
     </Table>
   );

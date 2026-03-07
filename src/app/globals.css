@@ -136,6 +136,20 @@
   .print\:hidden {
     display: none !important;
   }
+
+  .attendance-sheet-page {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .attendance-sheet-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .attendance-sheet-page:not(:first-child) {
+    padding-top: 3rem;
+  }
 }
 
 .background-wrapper {
