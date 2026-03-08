@@ -26,7 +26,7 @@ type SignatoryCardProps = {
 
 function SignatoryCard({ signatory, signature }: SignatoryCardProps) {
   return (
-    <div className="relative flex max-w-1/2 flex-1 flex-col items-stretch rounded-sm px-2 py-4 md:px-8 print:px-8">
+    <div className="relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 rounded-sm">
       {signature.success &&
         signature.data &&
         signatory?.includeSignature &&
