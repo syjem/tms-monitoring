@@ -2,6 +2,7 @@
 
 import { ERRORS } from '@/constants/errors';
 import { createClient } from '@/lib/supabase/server';
+import { isTransientAuthError } from '@/utils/is-transient-auth-error';
 import type { User } from '@supabase/supabase-js';
 
 /**
@@ -21,8 +22,39 @@ import type { User } from '@supabase/supabase-js';
  */
 export async function getUser(): Promise<User> {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data.user) throw new Error(ERRORS.UNAUTHORIZED);
 
-  return data.user;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      if (isTransientAuthError(error)) throw new Error(ERRORS.NETWORK_ERROR);
+      throw new Error(ERRORS.UNAUTHORIZED);
+    }
+
+    if (!data.user) throw new Error(ERRORS.UNAUTHORIZED);
+
+    return data.user;
+  } catch (error) {
+    if (error instanceof Error && error.message === ERRORS.NETWORK_ERROR) {
+      throw error;
+    }
+
+    if (isTransientAuthError(error)) throw new Error(ERRORS.NETWORK_ERROR);
+    throw new Error(ERRORS.UNAUTHORIZED);
+  }
+}
+
+/**
+ * Render-safe auth lookup for server components.
+ *
+ * Returns null on transient network issues so UI can degrade gracefully.
+ */
+export async function getUserForRender(): Promise<User | null> {
+  try {
+    return await getUser();
+  } catch (error) {
+    if (error instanceof Error && error.message === ERRORS.NETWORK_ERROR) {
+      return null;
+    }
+    throw error;
+  }
 }

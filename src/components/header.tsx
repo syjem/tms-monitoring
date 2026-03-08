@@ -1,9 +1,10 @@
-import { getUser } from '@/app/actions/get-user';
+import { getUserForRender } from '@/app/actions/get-user';
 import { CurrentUserAvatar } from '@/components/current-user-avatar';
 import { AppLogo } from '@/components/icons';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export async function Header() {
-  const user = await getUser();
+  const user = await getUserForRender();
 
   return (
     <header className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8">
@@ -12,7 +13,11 @@ export async function Header() {
           <AppLogo />
           <span className="font-medium">TMS Employee Monitoring</span>
         </div>
-        <CurrentUserAvatar user={user} />
+        {user ? (
+          <CurrentUserAvatar user={user} />
+        ) : (
+          <Skeleton className="h-8 w-8 rounded-full" />
+        )}
       </nav>
     </header>
   );
