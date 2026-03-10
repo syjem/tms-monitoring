@@ -52,15 +52,13 @@ export default function Page() {
       <div className="w-full max-w-md">
         {step === 'email' && (
           <>
-            <div className="text-center mb-8">
-              <h1 className="text-xl md:text-2xl font-bold text-center mb-12">
+            <div className="text-center mb-8 space-y-4">
+              <div className="w-full flex items-center justify-center">
+                <AppLogo className="size-10" />
+              </div>
+              <h1 className="text-xl md:text-2xl font-bold text-center">
                 {step === 'email' && (
-                  <React.Fragment>
-                    <div className="w-full flex items-center justify-center mb-8">
-                      <AppLogo />
-                    </div>
-                    TMS Employee Monitoring
-                  </React.Fragment>
+                  <React.Fragment>TMS Employee Monitoring</React.Fragment>
                 )}
               </h1>
             </div>
