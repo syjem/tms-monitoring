@@ -18,7 +18,7 @@ function AddPage({
   isEditable,
 }: AddPageProps) {
   return (
-    <div className="fixed inset-x-0 top-0 z-5 mx-auto flex w-full items-center justify-between border-b border-slate-300 bg-slate-100/95 px-4 py-2 shadow-[0_-8px_24px_-16px_rgba(0,0,0,0.45)] print:hidden sm:inset-x-auto sm:top-4 sm:right-4 sm:max-w-[250px] sm:rounded-md sm:border sm:border-slate-200 sm:bg-slate-50/80 sm:p-2 sm:shadow-none">
+    <div className="fixed inset-x-0 top-0 z-50 mx-auto flex w-full items-center justify-between border-b border-slate-300 bg-slate-100/95 px-4 py-2 shadow-[0_-8px_24px_-16px_rgba(0,0,0,0.45)] print:hidden sm:inset-x-auto sm:top-4 sm:right-4 sm:max-w-[250px] sm:rounded-md sm:border sm:border-slate-200 sm:bg-slate-50/80 sm:p-2 sm:shadow-none">
       <p className="text-xs font-medium tracking-wide text-slate-500">
         Page {activePage + 1} / {pageCount}
       </p>
