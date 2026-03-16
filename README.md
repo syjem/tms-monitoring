@@ -59,6 +59,22 @@ review and adjust records before final submission.
 
 ---
 
+## Screenshots
+
+**Upload Tab**  
+![Upload tab](public/1.jpeg)
+
+**Files Tab**  
+![Files tab](public/2.jpeg)
+
+**Edit Mode Monitoring**  
+![Edit mode monitoring](public/3.jpeg)
+
+**Ready-to-Print / Saved Mode Monitoring**  
+![Ready-to-print or saved mode monitoring](public/4.jpeg)
+
+---
+
 ## Intended Use
 
 This application is intended for internal evaluation and use within an
