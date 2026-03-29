@@ -15,6 +15,20 @@
       "when": 1766296921631,
       "tag": "0001_nosy_gravity",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774796166345,
+      "tag": "0002_flowery_ma_gnuci",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1774796574325,
+      "tag": "0003_cloudy_kid_colt",
+      "breakpoints": true
     }
   ]
 }
