@@ -8,30 +8,6 @@ export class ProfilesController {
     this.db = db;
   }
 
-  /**
-   * Inserts or updates an engineer document with a signature.
-   *
-   * Creates a new engineer record if one doesn't exist for the given user_id,
-   * otherwise updates the existing engineer's signature. Uses a database transaction
-   * to ensure atomicity.
-   *
-   * @param {string} user_id - The unique identifier of the engineer user
-   * @param {string} data - The signature data to store (typically base64 encoded)
-   * @returns {Promise<Array<{updated_at: Date, id: string}> | Array<{created_at: Date, id: string}>>}
-   *   Returns the updated or created engineer record with timestamp and id
-   *
-   * @throws {Error} Throws an error with context if the database operation fails
-   *
-   * @note This method does not validate signature data size or format.
-   *   Implement validation at the service/controller layer before calling this method.
-   *
-   * @example
-   * // Update existing engineer's signature
-   * const result = await controller.addSignature('user123', 'data:image/png;base64,...');
-   *
-   * // Insert new engineer record with signature
-   * const result = await controller.addSignature('newUser456', 'data:image/png;base64,...');
-   */
   async setSignature(user_id: string, data: string) {
     try {
       // update engineer signature if present otherwise add new entry
@@ -108,19 +84,6 @@ export class ProfilesController {
     }
   }
 
-  /**
-   * Updates the signatories array for a user's profile.
-   *
-   * Replaces the entire signatories JSONB field with the provided array.
-   * Uses a transaction to ensure atomicity.
-   *
-   * @param {string} user_id - The unique identifier of the user
-   * @param {Array<{id: number, name: string, title: string}>} signatories - The new signatories array
-   * @returns {Promise<{id: string, signatories: any, updated_at: Date}>}
-   *   Returns the updated profile data
-   *
-   * @throws {Error} Throws an error with context if the database operation fails
-   */
   async setSignatories(
     user_id: string,
     signatories: {
