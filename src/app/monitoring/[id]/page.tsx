@@ -1,5 +1,5 @@
-import { AttendanceSheetServer } from '@/app/monitoring/components/attendance-sheet-server';
-import { AttendanceSheetSkeleton } from '@/app/monitoring/components/attendance-sheet-skeleton';
+import { AttendanceServer } from '@/app/monitoring/_components/attendance-server';
+import { AttendanceSheetSkeleton } from '@/app/monitoring/_components/attendance-sheet-skeleton';
 import { Suspense } from 'react';
 
 async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -7,7 +7,7 @@ async function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <Suspense fallback={<AttendanceSheetSkeleton />}>
-      <AttendanceSheetServer id={id} />
+      <AttendanceServer id={id} />
     </Suspense>
   );
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import { setSignatories } from '@/app/actions/profiles/set-signatories';
-import { FirstSignatoryDialog } from '@/app/monitoring/components/first-dialog';
-import { SecondSignatoryDialog } from '@/app/monitoring/components/second-dialog';
+import { FirstSignatoryDialog } from '@/app/monitoring/_components/first-dialog';
+import { SecondSignatoryDialog } from '@/app/monitoring/_components/second-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Empty,

@@ -1,4 +1,4 @@
-import { AutoFitInput } from '@/app/monitoring/components/auto-fit-input';
+import { AutoFitInput } from '@/app/monitoring/_components/auto-fit-input';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';

@@ -1,5 +1,5 @@
-import { CustomTableHead } from '@/app/monitoring/components/table-head';
-import { CustomTableRow } from '@/app/monitoring/components/table-row';
+import { CustomTableHead } from '@/app/monitoring/_components/table-head';
+import { CustomTableRow } from '@/app/monitoring/_components/table-row';
 import { Table, TableBody } from '@/components/ui/table';
 import type { AttendancePageRow, AttendanceRow } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';

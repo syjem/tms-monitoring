@@ -1,5 +1,5 @@
-import { CustomTableHead } from '@/app/monitoring//components/table-head';
-import { AttendanceSheetHeader } from '@/app/monitoring/components/attendance-sheet-header';
+import { AttendanceSheetHeader } from '@/app/monitoring/_components/attendance-sheet-header';
+import { CustomTableHead } from '@/app/monitoring/_components/table-head';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 
