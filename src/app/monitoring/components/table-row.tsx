@@ -140,7 +140,7 @@ export function CustomTableRow({
             updateCell(groupIndex, rowIndex, 'destination', e.target.value)
           }
           className={cn(
-            isEditable ? 'cursor-text' : 'cursor-default text-center uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center ',
           )}
           readOnly={!isEditable}
         />
@@ -153,7 +153,7 @@ export function CustomTableRow({
             updateCell(groupIndex, rowIndex, 'remarks', e.target.value)
           }
           className={cn(
-            isEditable ? 'cursor-text' : 'cursor-default text-center uppercase',
+            isEditable ? 'cursor-text' : 'cursor-default text-center',
           )}
           readOnly={!isEditable}
         />

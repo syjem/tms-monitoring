@@ -89,7 +89,7 @@ export function AutoFitInput({
       value={value}
       {...props}
       className={cn(
-        'w-full h-full border-none outline-none bg-transparent',
+        'w-full h-full border-none outline-none bg-transparent text-xs uppercase',
         className,
       )}
     />
