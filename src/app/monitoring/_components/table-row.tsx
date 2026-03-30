@@ -1,9 +1,9 @@
 import { AutoFitInput } from '@/app/monitoring/_components/auto-fit-input';
+import { useSignature } from '@/app/monitoring/_components/signature-context';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import type { AttendanceRow } from '@/types';
-import { OperationResult } from '@/utils/with-error-handler';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import { SetStateAction } from 'react';
@@ -24,10 +24,6 @@ type TableRowProps = {
     field: keyof AttendanceRow,
     value: string,
   ) => void;
-  signature: OperationResult<
-    string | null | undefined,
-    Record<string, unknown>
-  >;
 };
 
 export function CustomTableRow({
@@ -41,8 +37,9 @@ export function CustomTableRow({
   setHoveredGroup,
   addRowToGroup,
   updateCell,
-  signature,
 }: TableRowProps) {
+  const signature = useSignature();
+
   return (
     <TableRow
       className={cn(

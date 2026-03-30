@@ -3,6 +3,7 @@
 import { setSignatories } from '@/app/actions/profiles/set-signatories';
 import { FirstSignatoryDialog } from '@/app/monitoring/_components/first-dialog';
 import { SecondSignatoryDialog } from '@/app/monitoring/_components/second-dialog';
+import { useSignature } from '@/app/monitoring/_components/signature-context';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
@@ -20,10 +21,6 @@ import { toast } from 'sonner';
 
 type SignatoriesProps = {
   isEditable: boolean;
-  signature: OperationResult<
-    string | null | undefined,
-    Record<string, unknown>
-  >;
   signatories: OperationResult<
     {
       id: number;
@@ -44,9 +41,9 @@ type Signatory = {
 
 export const Signatories = ({
   isEditable,
-  signature,
   signatories,
 }: SignatoriesProps) => {
+  const signature = useSignature();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isFirstDialogOpen, setIsFirstDialogOpen] = useState(false);

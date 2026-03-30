@@ -1,3 +1,6 @@
+'use client';
+
+import { useSignature } from '@/app/monitoring/_components/signature-context';
 import { OperationResult } from '@/utils/with-error-handler';
 import Image from 'next/image';
 
@@ -9,22 +12,29 @@ type Signatory = {
 };
 
 type SignatoriesPreviewProps = {
-  signature: OperationResult<
-    string | null | undefined,
-    Record<string, unknown>
-  >;
   signatories: OperationResult<Signatory[], Record<string, unknown>>;
 };
 
 type SignatoryCardProps = {
   signatory: Signatory | null;
-  signature: OperationResult<
-    string | null | undefined,
-    Record<string, unknown>
-  >;
 };
 
-function SignatoryCard({ signatory, signature }: SignatoryCardProps) {
+export function SignatoriesPreview({ signatories }: SignatoriesPreviewProps) {
+  const data = signatories.success ? signatories.data : [];
+  const firstSignatory = data.find((s) => s.id === 1) ?? null;
+  const secondSignatory = data.find((s) => s.id === 2) ?? null;
+
+  return (
+    <footer className="mx-auto flex max-w-4xl justify-between gap-4 print:max-w-[700px]">
+      <SignatoryCard signatory={firstSignatory} />
+      <SignatoryCard signatory={secondSignatory} />
+    </footer>
+  );
+}
+
+function SignatoryCard({ signatory }: SignatoryCardProps) {
+  const signature = useSignature();
+
   return (
     <div className="relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 rounded-sm">
       {signature.success &&
@@ -47,21 +57,5 @@ function SignatoryCard({ signatory, signature }: SignatoryCardProps) {
         {signatory?.title ?? ''}
       </p>
     </div>
-  );
-}
-
-export function SignatoriesPreview({
-  signature,
-  signatories,
-}: SignatoriesPreviewProps) {
-  const data = signatories.success ? signatories.data : [];
-  const firstSignatory = data.find((s) => s.id === 1) ?? null;
-  const secondSignatory = data.find((s) => s.id === 2) ?? null;
-
-  return (
-    <footer className="mx-auto flex max-w-4xl justify-between gap-4 print:max-w-[700px]">
-      <SignatoryCard signatory={firstSignatory} signature={signature} />
-      <SignatoryCard signatory={secondSignatory} signature={signature} />
-    </footer>
   );
 }

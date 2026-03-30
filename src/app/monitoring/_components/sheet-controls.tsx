@@ -1,6 +1,7 @@
 'use client';
 
 import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
+import { useSignature } from '@/app/monitoring/_components/signature-context';
 import SignatureMenu from '@/components/custom/signature-menu';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,7 +9,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { OperationResult } from '@/utils/with-error-handler';
 import { useQuery } from '@tanstack/react-query';
 import { Loader, Printer, Save, Signature, SquarePen } from 'lucide-react';
 import { useState } from 'react';
@@ -18,10 +18,6 @@ type ButtonActionsProps = {
   isEditable: boolean;
   saveSheet: () => void;
   enableEditing: () => void;
-  signature: OperationResult<
-    string | null | undefined,
-    Record<string, unknown>
-  >;
 };
 
 export function SheetControls({
@@ -29,8 +25,8 @@ export function SheetControls({
   isEditable,
   saveSheet,
   enableEditing,
-  signature,
 }: ButtonActionsProps) {
+  const signature = useSignature();
   const [openSignatureDialog, setSignatureDialogState] = useState(false);
   const { data, refetch, isFetching } = useQuery({
     queryFn: () => getEngineerSignature(),

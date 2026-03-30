@@ -25,10 +25,6 @@ import { toast } from 'sonner';
 
 type AttendanceSheetProps = {
   workLog: { id: string; logs: AttendanceData };
-  signature: OperationResult<
-    string | null | undefined,
-    Record<string, unknown>
-  >;
   signatories: OperationResult<
     {
       id: number;
@@ -42,7 +38,6 @@ type AttendanceSheetProps = {
 
 export default function AttendanceSheet({
   workLog,
-  signature,
   signatories,
 }: AttendanceSheetProps) {
   const [isEditable, setIsEditable] = useState(false);
@@ -248,7 +243,6 @@ export default function AttendanceSheet({
         isEditable={isEditable}
         saveSheet={saveSheet}
         enableEditing={enableEditing}
-        signature={signature}
       />
 
       <div className="mx-auto max-w-4xl space-y-8 print:max-w-[700px] print:space-y-0">
@@ -270,21 +264,13 @@ export default function AttendanceSheet({
               setHoveredGroup={setHoveredGroup}
               updateCell={updateCell}
               addRowToGroup={addRowToGroup}
-              signature={signature}
             />
 
             {/* Keep only one interactive Signatories instance mounted at a time. */}
             {pageIndex === activePage ? (
-              <Signatories
-                isEditable={isEditable}
-                signature={signature}
-                signatories={signatories}
-              />
+              <Signatories isEditable={isEditable} signatories={signatories} />
             ) : (
-              <SignatoriesPreview
-                signature={signature}
-                signatories={signatories}
-              />
+              <SignatoriesPreview signatories={signatories} />
             )}
           </section>
         ))}
