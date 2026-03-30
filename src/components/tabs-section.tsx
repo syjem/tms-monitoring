@@ -83,7 +83,6 @@ export function TabsSection() {
     setTab(value);
 
     if (value === 'files') {
-      // Ensure Files tab can fetch immediately on click, without waiting for idle time
       void loadLogs();
     }
 
