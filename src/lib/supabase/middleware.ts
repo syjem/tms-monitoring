@@ -1,4 +1,3 @@
-import { isTransientAuthError } from '@/utils/is-transient-auth-error';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
@@ -38,22 +37,8 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  let user: unknown;
-  let claimsError: unknown;
-
-  try {
-    const { data, error } = await supabase.auth.getClaims();
-    user = data?.claims;
-    claimsError = error;
-  } catch (error) {
-    claimsError = error;
-  }
-
-  // Do not redirect to login when auth lookup fails because of transient
-  // connectivity issues; allow the request to continue and let UI recover.
-  if (claimsError && isTransientAuthError(claimsError)) {
-    return supabaseResponse;
-  }
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
 
   if (
     !user &&
