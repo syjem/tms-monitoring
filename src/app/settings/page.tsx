@@ -22,7 +22,7 @@ export default async function SettingsPage() {
             Manage your Profile Settings
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-gray-600 md:text-base">
-            Update your signature, signatories, and attendance defaults in one
+            Update your signature, signatories, and monitoring defaults in one
             place.
           </p>
         </section>
