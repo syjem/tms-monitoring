@@ -64,17 +64,17 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
   const extractStageStyle = {
     uploading: {
       container: 'border-cyan-500/20 bg-cyan-500/5',
-      pulse: 'bg-cyan-400/20',
+      pulse: 'bg-cyan-400/40',
       text: 'text-cyan-700 dark:text-cyan-300',
     },
     extracting: {
-      container: 'border-amber-500/20 bg-amber-500/5',
-      pulse: 'bg-amber-400/20',
-      text: 'text-amber-700 dark:text-amber-300',
+      container: 'border-purple-500/20 bg-purple-500/5',
+      pulse: 'bg-purple-400/40',
+      text: 'text-purple-700 dark:text-purple-300',
     },
     saving: {
       container: 'border-emerald-500/20 bg-emerald-500/5',
-      pulse: 'bg-emerald-400/20',
+      pulse: 'bg-emerald-400/40',
       text: 'text-emerald-700 dark:text-emerald-300',
     },
   }[stage];
