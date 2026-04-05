@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
 import type { AttendanceDefaults } from '@/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Loader, Settings2 } from 'lucide-react';
+import { Layers2, Loader, PenLine } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -69,13 +69,11 @@ export function AttendanceDefaultsPanel() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Settings2 className="size-4 text-blue-600" />
-            <p className="text-sm font-semibold text-gray-900">
-              Defaults for new monitorings
-            </p>
+            <Layers2 className="size-4 text-blue-600" />
+            <p className="text-sm font-semibold text-gray-900">Defaults</p>
           </div>
           <p className="text-xs text-gray-600">
-            Applied only when a new attendance sheet is generated.
+            Change your destination and remarks&apos; defaults.
           </p>
         </div>
 
@@ -91,7 +89,10 @@ export function AttendanceDefaultsPanel() {
               Refreshing...
             </>
           ) : (
-            'Edit Defaults'
+            <>
+              <PenLine />
+              Edit Defaults
+            </>
           )}
         </Button>
       </div>

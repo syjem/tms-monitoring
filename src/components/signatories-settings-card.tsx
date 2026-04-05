@@ -12,9 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { OperationResult } from '@/utils/with-error-handler';
 import { cn } from '@/lib/utils';
-import { Pencil, Plus, Trash2 } from 'lucide-react';
+import type { OperationResult } from '@/utils/with-error-handler';
+import { FilePenLine, PenLine, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -162,11 +162,18 @@ export function SignatoriesSettingsCard({
 
       <Card>
         <CardHeader>
-          <CardTitle>Signatories</CardTitle>
-          <CardDescription>
-            Manage the two signatory slots that appear at the bottom of your
-            monitoring sheets.
-          </CardDescription>
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <FilePenLine className="size-4 text-blue-600" />
+              <CardTitle className="text-sm font-semibold text-gray-900">
+                Signatories
+              </CardTitle>
+            </div>
+            <CardDescription className="text-xs text-gray-600">
+              Manage the two signatory slots that appear at the bottom of your
+              monitoring sheets.
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
@@ -226,7 +233,7 @@ function SignatorySlot({
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
             {label}
           </p>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-xs text-gray-600">
             {hasSignatory
               ? 'Shown in generated monitoring sheets.'
               : 'No signatory assigned yet.'}
@@ -239,7 +246,7 @@ function SignatorySlot({
             disabled={disabled}
             onClick={onEdit}
           >
-            {hasSignatory ? <Pencil /> : <Plus />}
+            {hasSignatory ? <PenLine /> : <Plus />}
             {hasSignatory ? 'Edit' : 'Add'}
           </Button>
           {hasSignatory ? (

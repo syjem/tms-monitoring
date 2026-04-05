@@ -1,4 +1,4 @@
-import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
+import { BackgroundBottom } from '@/components/backgrounds';
 import { HeaderSkeleton } from '@/components/skeletons/header-skeleton';
 import {
   Card,
@@ -13,7 +13,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function Loading() {
   return (
     <>
-      <BackgroundTop />
       <HeaderSkeleton />
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="mb-8 text-center">

@@ -1,14 +1,3 @@
-export const BackgroundTop = () => {
-  return (
-    <div
-      aria-hidden="true"
-      className="background-wrapper fixed inset-x-0 top-0 -z-10 overflow-hidden sm:-top-80"
-    >
-      <div className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 background-fancy sm:left-[calc(50%-30rem)] sm:w-288.75" />
-    </div>
-  );
-};
-
 export const BackgroundBottom = () => {
   return (
     <div

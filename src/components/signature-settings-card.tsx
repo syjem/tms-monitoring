@@ -1,6 +1,7 @@
 'use client';
 
 import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
+import type { SignatureData } from '@/app/monitoring/_components/signature-context';
 import SignatureMenu from '@/components/custom/signature-menu';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,9 +13,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { SignatureData } from '@/app/monitoring/_components/signature-context';
 import { useQuery } from '@tanstack/react-query';
-import { PenLine } from 'lucide-react';
+import { PenLine, Plus, Signature } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -39,15 +39,20 @@ export function SignatureSettingsCard({
 
   return (
     <Card>
-      <CardHeader>
-        <div>
-          <CardTitle>Signature</CardTitle>
-          <CardDescription>
-            Update the signature used in your monitoring sheets and signatory
-            blocks.
+      <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Signature className="size-4 text-blue-600" />
+            <CardTitle className="text-sm font-semibold text-gray-900">
+              Signature
+            </CardTitle>
+          </div>
+          <CardDescription className="text-xs text-gray-600">
+            {signatureImage ? 'Update' : 'Add'} the signature used in your
+            monitoring sheets and signatory blocks.
           </CardDescription>
         </div>
-        <CardAction>
+        <CardAction className="w-full sm:w-auto">
           <SignatureMenu
             open={open}
             onOpenChange={setOpen}
@@ -55,8 +60,8 @@ export function SignatureSettingsCard({
             isFetching={isFetching}
             refetch={refetch}
           >
-            <Button variant="outline">
-              <PenLine />
+            <Button variant="outline" className="w-full">
+              {signatureImage ? <PenLine /> : <Plus />}
               {signatureImage ? 'Edit Signature' : 'Add Signature'}
             </Button>
           </SignatureMenu>

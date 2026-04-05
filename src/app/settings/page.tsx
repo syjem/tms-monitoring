@@ -2,7 +2,7 @@ import { getSignatories } from '@/app/actions/profiles/get-signatories';
 import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
 import { SignatureProvider } from '@/app/monitoring/_components/signature-context';
 import { AttendanceDefaultsPanel } from '@/components/attendance-defaults';
-import { BackgroundBottom, BackgroundTop } from '@/components/backgrounds';
+import { BackgroundBottom } from '@/components/backgrounds';
 import { Header } from '@/components/header';
 import { SignatoriesSettingsCard } from '@/components/signatories-settings-card';
 import { SignatureSettingsCard } from '@/components/signature-settings-card';
@@ -15,7 +15,6 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <BackgroundTop />
       <Header />
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="mb-8 text-center">
