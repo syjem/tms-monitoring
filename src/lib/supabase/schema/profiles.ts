@@ -16,6 +16,8 @@ export const profiles = pgTable(
     id: uuid().primaryKey().defaultRandom(),
     created_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updated_at: timestamp({ withTimezone: true }).notNull().defaultNow(),
+    default_destination: text(),
+    default_remarks: text(),
     signature: text(),
     signatories: jsonb().$type<
       {

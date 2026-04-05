@@ -65,6 +65,8 @@ export class ProfilesController {
       const result = await this.db
         .select({
           id: profiles.id,
+          default_destination: profiles.default_destination,
+          default_remarks: profiles.default_remarks,
           signatories: profiles.signatories,
           created_at: profiles.created_at,
           updated_at: profiles.updated_at,
@@ -132,6 +134,67 @@ export class ProfilesController {
       if (e instanceof Error) {
         throw new Error(
           `[${ProfilesController.name}:${this.setSignatories.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
+
+  async setAttendanceDefaults(
+    user_id: string,
+    defaults: {
+      destination: string;
+      remarks: string;
+    },
+  ) {
+    try {
+      const result = await this.db.transaction(async (txs) => {
+        const profile = await txs
+          .select()
+          .from(profiles)
+          .where(eq(profiles.user_id, user_id));
+
+        if (profile.length > 0) {
+          const updated = await txs
+            .update(profiles)
+            .set({
+              default_destination: defaults.destination,
+              default_remarks: defaults.remarks,
+              updated_at: new Date(),
+            })
+            .where(eq(profiles.user_id, user_id))
+            .returning({
+              id: profiles.id,
+              default_destination: profiles.default_destination,
+              default_remarks: profiles.default_remarks,
+              updated_at: profiles.updated_at,
+            });
+
+          return updated[0];
+        }
+
+        const created = await txs
+          .insert(profiles)
+          .values({
+            user_id,
+            default_destination: defaults.destination,
+            default_remarks: defaults.remarks,
+          })
+          .returning({
+            id: profiles.id,
+            default_destination: profiles.default_destination,
+            default_remarks: profiles.default_remarks,
+            updated_at: profiles.updated_at,
+          });
+
+        return created[0];
+      });
+
+      return result;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${ProfilesController.name}:${this.setAttendanceDefaults.name}] Error: ` +
             e?.message,
         );
       }

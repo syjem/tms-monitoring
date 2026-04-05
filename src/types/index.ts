@@ -17,6 +17,11 @@ export type AttendancePageRow = {
 export type AttendanceGroup = AttendanceRow[];
 export type AttendanceData = AttendanceGroup[]; // two dimensional array
 
+export type AttendanceDefaults = {
+  destination: string;
+  remarks: string;
+};
+
 export interface ApiLogData {
   BreakIn: string;
   BreakOut: string;

@@ -2,6 +2,8 @@
 
 import { extractTextFromPDF } from '@/app/actions/extract-pdf';
 import { createLog } from '@/app/actions/logs/create-log';
+import { getAttendanceDefaults } from '@/app/actions/profiles/get-attendance-defaults';
+import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
 import { isNextRedirectError } from '@/utils/is-next-redirect-error';
 import { processLogs } from '@/utils/process-logs';
 import { useCallback, useEffect, useState } from 'react';
@@ -98,7 +100,13 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
       }
 
       const period = `${result.data.from} — ${result.data.to}`;
-      const processedLogs = processLogs(result.data.logs);
+
+      const defaultsResult = await getAttendanceDefaults();
+      const attendanceDefaults = defaultsResult.success
+        ? defaultsResult.data
+        : FALLBACK_ATTENDANCE_DEFAULTS;
+
+      const processedLogs = processLogs(result.data.logs, attendanceDefaults);
 
       setStage('saving');
       await createLog(period, processedLogs);

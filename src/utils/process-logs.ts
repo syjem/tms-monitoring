@@ -1,9 +1,13 @@
-import type { ApiLogData, AttendanceData } from '@/types';
+import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
+import type { AttendanceDefaults, ApiLogData, AttendanceData } from '@/types';
 import { formatDate } from '@/utils/format-date';
 import { formatTimeTo12Hour } from '@/utils/format-time';
 import { isRowHasRecords } from '@/utils/is-row-has-records';
 
-export const processLogs = (logs: ApiLogData[]): AttendanceData => {
+export const processLogs = (
+  logs: ApiLogData[],
+  defaults: AttendanceDefaults = FALLBACK_ATTENDANCE_DEFAULTS,
+): AttendanceData => {
   const groupedData: AttendanceData = [];
 
   logs.forEach((log) => {
@@ -34,8 +38,8 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           sched: log.Shift,
           timeIn: formatTimeTo12Hour(log.TimeIn),
           timeOut: formatTimeTo12Hour(log.BreakOut),
-          destination: 'OFFICE',
-          remarks: log.Remarks || 'DUTY ON CALL',
+          destination: defaults.destination,
+          remarks: log.Remarks || defaults.remarks,
         },
         {
           date: '',
@@ -43,8 +47,8 @@ export const processLogs = (logs: ApiLogData[]): AttendanceData => {
           sched: '',
           timeIn: formatTimeTo12Hour(log.BreakIn),
           timeOut: formatTimeTo12Hour(log.TimeOut),
-          destination: 'OFFICE',
-          remarks: log.Remarks || 'DUTY ON CALL',
+          destination: defaults.destination,
+          remarks: log.Remarks || defaults.remarks,
         },
       ]);
     }
