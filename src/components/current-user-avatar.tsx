@@ -11,7 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { createClient } from '@/lib/supabase/client';
 import { User } from '@supabase/supabase-js';
-import { Loader, LogOut } from 'lucide-react';
+import { Loader, LogOut, Settings2 } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -58,6 +59,13 @@ export function CurrentUserAvatar({ user }: { user: User }) {
             <address className="text-muted-foreground">{email}</address>
           </div>
         </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild className="font-medium">
+          <Link href="/settings">
+            <Settings2 />
+            Settings
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignout} className="font-medium">
           {loading ? (
