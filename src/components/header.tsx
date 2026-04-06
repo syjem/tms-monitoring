@@ -9,10 +9,10 @@ export async function Header() {
 
   return (
     <header className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8">
-      <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 px-4 rounded border-b">
+      <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 rounded border-b">
         <Link href="/" className="flex items-center gap-2 cursor-default">
           <AppLogo className="size-7" />
-          <span className="font-medium cursor-default">
+          <span className="font-semibold cursor-default hidden sm:inline-block">
             TMS Employee Monitoring
           </span>
         </Link>
