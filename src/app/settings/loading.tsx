@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { FilePenLine, Layers2, Signature } from 'lucide-react';
 
 export default function Loading() {
   return (
@@ -27,12 +28,17 @@ export default function Loading() {
 
         <div className="space-y-6">
           <Card>
-            <CardHeader>
-              <div>
-                <CardTitle>Signature</CardTitle>
-                <CardDescription>
-                  Update the signature used in your monitoring sheets and
-                  signatory blocks.
+            <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <Signature className="size-4 text-blue-600" />
+                  <CardTitle className="text-sm font-semibold text-gray-900">
+                    Signature
+                  </CardTitle>
+                </div>
+                <CardDescription className="text-xs text-gray-600">
+                  Add the signature used in your monitoring sheets and signatory
+                  blocks.
                 </CardDescription>
               </div>
               <CardAction>
@@ -46,11 +52,18 @@ export default function Loading() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Signatories</CardTitle>
-              <CardDescription>
-                Manage the two signatory slots that appear at the bottom of your
-                monitoring sheets.
-              </CardDescription>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <FilePenLine className="size-4 text-blue-600" />
+                  <CardTitle className="text-sm font-semibold text-gray-900">
+                    Signatories
+                  </CardTitle>
+                </div>
+                <CardDescription className="text-xs text-gray-600">
+                  Manage the two signatory slots that appear at the bottom of
+                  your monitoring sheets.
+                </CardDescription>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
@@ -64,13 +77,13 @@ export default function Loading() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <div className="size-4 rounded-sm bg-blue-100" />
+                  <Layers2 className="size-4 text-blue-600" />
                   <p className="text-sm font-semibold text-gray-900">
-                    Defaults for new monitorings
+                    Defaults
                   </p>
                 </div>
                 <p className="text-xs text-gray-600">
-                  Applied only when a new attendance sheet is generated.
+                  Change your destination and remarks&apos; defaults.
                 </p>
               </div>
 
