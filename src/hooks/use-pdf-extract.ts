@@ -87,11 +87,10 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     setErrors([]);
 
     setStage('uploading');
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setStage('extracting');
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
+      setStage('extracting');
       const result = await extractTextFromPDF(files[0]);
 
       if (!result.success) {

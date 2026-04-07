@@ -16,11 +16,11 @@ export function ExtractionAnimation({ stage }: ExtractionAnimationProps) {
   useEffect(() => {
     setProgress(0);
     let max = 100;
-    let speed = 5;
+    let speed = 1;
 
     if (stage === 'extracting') {
       max = 99;
-      speed = 200;
+      speed = 100;
     }
 
     if (stage === 'saving') {
