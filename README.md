@@ -92,7 +92,7 @@ transfer of rights, if any, shall be subject to separate agreement.
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15, TypeScript, Tailwind CSS, shadcn/ui
+- **Frontend**: Next.js 15, TypeScript, Tailwind CSS, Shadcn/ui, React Query
 - **Backend**: Next.js Server Actions
 - **External API**: Flask REST API with Gemini AI integration (PDF extraction)
 - **Database**: PostgreSQL (Supabase) with Drizzle ORM
