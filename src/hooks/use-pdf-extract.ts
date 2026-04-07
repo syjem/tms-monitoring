@@ -2,8 +2,8 @@
 
 import { extractTextFromPDF } from '@/app/actions/extract-pdf';
 import { createLog } from '@/app/actions/logs/create-log';
-import { getAttendanceDefaults } from '@/app/actions/profiles/get-attendance-defaults';
 import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
+import type { AttendanceDefaults } from '@/types';
 import { isNextRedirectError } from '@/utils/is-next-redirect-error';
 import { processLogs } from '@/utils/process-logs';
 import { useCallback, useEffect, useState } from 'react';
@@ -25,6 +25,7 @@ type UsePDFExtractOptions = {
   allowedMimeTypes?: string[];
   maxFileSize?: number;
   maxFiles?: number;
+  attendanceDefaults?: AttendanceDefaults;
 };
 
 type ExtractionStage = 'uploading' | 'extracting' | 'saving' | null;
@@ -34,6 +35,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     allowedMimeTypes = ['application/pdf'],
     maxFileSize = Number.POSITIVE_INFINITY,
     maxFiles = 1,
+    attendanceDefaults = FALLBACK_ATTENDANCE_DEFAULTS,
   } = options;
 
   const [files, setFiles] = useState<FileWithPreview[]>([]);
@@ -100,11 +102,6 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
 
       const period = `${result.data.from} — ${result.data.to}`;
 
-      const defaultsResult = await getAttendanceDefaults();
-      const attendanceDefaults = defaultsResult.success
-        ? defaultsResult.data
-        : FALLBACK_ATTENDANCE_DEFAULTS;
-
       const processedLogs = processLogs(result.data.logs, attendanceDefaults);
 
       setStage('saving');
@@ -120,7 +117,7 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     } finally {
       setLoading(false);
     }
-  }, [files]);
+  }, [attendanceDefaults, files]);
 
   useEffect(() => {
     if (files.length === 0) {

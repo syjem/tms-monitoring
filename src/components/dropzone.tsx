@@ -12,10 +12,15 @@ import {
 } from '@/components/ui/empty';
 import { usePDFExtract } from '@/hooks/use-pdf-extract';
 import { cn } from '@/lib/utils';
+import type { AttendanceDefaults } from '@/types';
 import { formatBytes } from '@/utils/format-bytes';
 import { FileText, ScanLine, Upload, X } from 'lucide-react';
 
-export function Dropzone() {
+export function Dropzone({
+  attendanceDefaults,
+}: {
+  attendanceDefaults?: AttendanceDefaults;
+}) {
   const {
     files,
     setFiles,
@@ -31,6 +36,7 @@ export function Dropzone() {
     allowedMimeTypes: ['application/pdf'],
     maxFiles: 1,
     maxFileSize: 1000 * 1000 * 5, // 5MB
+    attendanceDefaults,
   });
 
   const file = files[0];
@@ -89,8 +95,8 @@ export function Dropzone() {
                                 2,
                               )} (Size: ${formatBytes(file.size, 2)})`
                             : e.message.startsWith('File type must be')
-                            ? 'File type not allowed'
-                            : e.message,
+                              ? 'File type not allowed'
+                              : e.message,
                         )
                         .join(', ')}
                     </p>

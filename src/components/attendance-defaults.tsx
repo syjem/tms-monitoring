@@ -1,12 +1,11 @@
 'use client';
 
-import { getAttendanceDefaults } from '@/app/actions/profiles/get-attendance-defaults';
 import { setAttendanceDefaults } from '@/app/actions/profiles/set-attendance-defaults';
 import { AttendanceDefaultsDialog } from '@/components/attendance-defaults-dialog';
 import { Button } from '@/components/ui/button';
-import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
+import { useAttendanceDefaults } from '@/hooks/use-attendance-defaults';
 import type { AttendanceDefaults } from '@/types';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Layers2, Loader, PenLine } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -15,16 +14,8 @@ export function AttendanceDefaultsPanel() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { data, isLoading, isFetching } = useQuery({
-    queryFn: () => getAttendanceDefaults(),
-    queryKey: ['attendance-defaults'],
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
-
-  const defaults =
-    data?.success && data.data ? data.data : FALLBACK_ATTENDANCE_DEFAULTS;
+  const { attendanceDefaults, isLoading, isFetching } =
+    useAttendanceDefaults();
 
   const handleSubmit = async (values: AttendanceDefaults) => {
     setIsSubmitting(true);
@@ -61,7 +52,7 @@ export function AttendanceDefaultsPanel() {
       <AttendanceDefaultsDialog
         open={open}
         setOpen={setOpen}
-        defaults={defaults}
+        defaults={attendanceDefaults}
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
       />
@@ -103,7 +94,7 @@ export function AttendanceDefaultsPanel() {
             Destination
           </p>
           <p className="mt-1 text-sm font-semibold text-gray-900">
-            {defaults.destination}
+            {attendanceDefaults.destination}
           </p>
         </div>
 
@@ -112,7 +103,7 @@ export function AttendanceDefaultsPanel() {
             Remarks
           </p>
           <p className="mt-1 text-sm font-semibold text-gray-900">
-            {defaults.remarks}
+            {attendanceDefaults.remarks}
           </p>
         </div>
       </div>

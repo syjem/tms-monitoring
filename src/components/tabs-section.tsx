@@ -4,6 +4,7 @@ import { getWorkLogs } from '@/app/actions/logs/get-work-logs';
 import { Dropzone } from '@/components/dropzone';
 import FileManager from '@/components/file-manager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useAttendanceDefaults } from '@/hooks/use-attendance-defaults';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, useTransition } from 'react';
 
@@ -26,6 +27,7 @@ export function TabsSection() {
   const [hasLoadedLogs, setHasLoadedLogs] = useState(false);
   const [isLogsLoading, setIsLogsLoading] = useState(false);
   const [logsError, setLogsError] = useState<string | null>(null);
+  const { attendanceDefaults } = useAttendanceDefaults();
 
   const loadLogs = useCallback(
     async (force = false) => {
@@ -116,7 +118,7 @@ export function TabsSection() {
         </TabsList>
 
         <TabsContent value="upload">
-          <Dropzone />
+          <Dropzone attendanceDefaults={attendanceDefaults} />
         </TabsContent>
 
         <TabsContent value="files">
