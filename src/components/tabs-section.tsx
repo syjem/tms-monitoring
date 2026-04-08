@@ -1,21 +1,21 @@
 'use client';
 
-import { getWorkLogs } from '@/app/actions/logs/get-work-logs';
 import { Dropzone } from '@/components/dropzone';
 import FileManager from '@/components/file-manager';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAttendanceDefaults } from '@/hooks/use-attendance-defaults';
+import {
+  getWorkLogsQueryOptions,
+  useWorkLogs,
+  WORK_LOGS_QUERY_KEY,
+} from '@/hooks/use-work-logs';
+import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState, useTransition } from 'react';
-
-type WorkLogListItem = {
-  id: string;
-  period: string;
-  updated_at: Date | string;
-};
+import { useEffect, useState, useTransition } from 'react';
 
 export function TabsSection() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -23,50 +23,27 @@ export function TabsSection() {
 
   const [tab, setTab] = useState(currentTab);
   const [isPending, startTransition] = useTransition();
-  const [logs, setLogs] = useState<WorkLogListItem[]>([]);
-  const [hasLoadedLogs, setHasLoadedLogs] = useState(false);
-  const [isLogsLoading, setIsLogsLoading] = useState(false);
-  const [logsError, setLogsError] = useState<string | null>(null);
   const { attendanceDefaults } = useAttendanceDefaults();
-
-  const loadLogs = useCallback(
-    async (force = false) => {
-      if (isLogsLoading) return;
-      if (hasLoadedLogs && !force) return;
-
-      setIsLogsLoading(true);
-      setLogsError(null);
-
-      try {
-        const workLogs = await getWorkLogs();
-        setLogs(workLogs);
-        setHasLoadedLogs(true);
-      } catch {
-        setLogsError('Unable to load work logs right now.');
-      } finally {
-        setIsLogsLoading(false);
-      }
-    },
-    [hasLoadedLogs, isLogsLoading],
-  );
+  const {
+    logs,
+    error,
+    isLoading,
+    isFetching,
+    refetch: refetchLogs,
+  } = useWorkLogs(tab === 'files');
 
   useEffect(() => {
-    setTab(currentTab);
-  }, [currentTab]);
-
-  useEffect(() => {
-    if (tab !== 'files' || hasLoadedLogs) return;
-    void loadLogs();
-  }, [tab, hasLoadedLogs, loadLogs]);
-
-  useEffect(() => {
-    // Start loading Files data in idle time
-    if (hasLoadedLogs) return;
+    const queryState = queryClient.getQueryState(WORK_LOGS_QUERY_KEY);
+    if (
+      queryState?.status === 'success' ||
+      queryState?.fetchStatus === 'fetching'
+    )
+      return;
 
     if (typeof globalThis.requestIdleCallback === 'function') {
       const idleId = globalThis.requestIdleCallback(
         () => {
-          void loadLogs();
+          void queryClient.prefetchQuery(getWorkLogsQueryOptions());
         },
         { timeout: 1500 },
       );
@@ -75,18 +52,18 @@ export function TabsSection() {
     }
 
     const timeoutId = setTimeout(() => {
-      void loadLogs();
+      void queryClient.prefetchQuery(getWorkLogsQueryOptions());
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [hasLoadedLogs, loadLogs]);
+  }, [queryClient]);
+
+  useEffect(() => {
+    setTab(currentTab);
+  }, [currentTab]);
 
   const handleTabChange = (value: string) => {
     setTab(value);
-
-    if (value === 'files') {
-      void loadLogs();
-    }
 
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
@@ -99,7 +76,8 @@ export function TabsSection() {
 
   // Avoid flash of empty state
   const shouldShowLogsLoading =
-    isLogsLoading || (tab === 'files' && !hasLoadedLogs && !logsError);
+    tab === 'files' && (isLoading || (isFetching && logs.length === 0));
+  const logsError = error instanceof Error ? error.message : null;
 
   return (
     <section className="mt-6 max-w-xl mx-auto px-4">
@@ -127,7 +105,7 @@ export function TabsSection() {
             isLoading={shouldShowLogsLoading}
             error={logsError}
             onRefreshLogs={async () => {
-              await loadLogs(true);
+              await refetchLogs();
             }}
           />
         </TabsContent>
