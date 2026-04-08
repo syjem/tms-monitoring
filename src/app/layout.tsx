@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'TMS Employee Monitoring',
+  title: 'Employee Monitoring',
   description:
-    'Automates the process of preparing attendance monitoring by extracting data from uploaded PDF reports',
+    'Upload your daily logs PDF and automate your monitoring process with an AI-powered solution',
 };
 
 export default function RootLayout({

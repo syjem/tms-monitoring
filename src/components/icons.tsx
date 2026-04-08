@@ -1,17 +1,71 @@
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import { useId } from 'react';
 
 export const AppLogo = ({ className }: { className?: string }) => {
+  const gradientId = useId().replace(/:/g, '');
+  const accentId = `${gradientId}-accent`;
+
   return (
-    <div className={cn('rounded-full bg-black p-2', className)}>
-      <Image
-        src="/vercel.svg"
-        alt="App Logo"
-        width={48}
-        height={48}
-        className="rounded-full"
+    <svg
+      viewBox="0 0 64 64"
+      fill="none"
+      aria-hidden="true"
+      className={cn('shrink-0', className)}
+    >
+      <defs>
+        <linearGradient
+          id={gradientId}
+          x1="10"
+          y1="6"
+          x2="56"
+          y2="58"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#111827" />
+          <stop offset="0.6" stopColor="#0f172a" />
+          <stop offset="1" stopColor="#14532d" />
+        </linearGradient>
+        <linearGradient
+          id={accentId}
+          x1="15"
+          y1="12"
+          x2="48"
+          y2="12"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#6ee7b7" />
+          <stop offset="1" stopColor="#22c55e" />
+        </linearGradient>
+      </defs>
+
+      <rect x="4" y="4" width="56" height="56" rx="18" fill={`url(#${gradientId})`} />
+      <rect
+        x="4.75"
+        y="4.75"
+        width="54.5"
+        height="54.5"
+        rx="17.25"
+        stroke="rgba(255,255,255,0.12)"
+        strokeWidth="1.5"
       />
-    </div>
+
+      <path
+        d="M17 19.5h17v5H23v5.5h8.5v5H23v5.5h11v5H17z"
+        fill="#F8FAFC"
+      />
+      <path
+        d="M36 45V19.5h4.5L46.5 30l6-10.5H57V45h-5.5V30.5l-5 8.25h-.75l-5-8.25V45z"
+        fill="#F8FAFC"
+      />
+
+      <path
+        d="M17 13h16"
+        stroke={`url(#${accentId})`}
+        strokeWidth="3"
+        strokeLinecap="round"
+      />
+      <circle cx="49.5" cy="14.5" r="3.5" fill="#86EFAC" />
+    </svg>
   );
 };
 

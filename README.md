@@ -1,8 +1,8 @@
-# TMS Employee Monitoring
+# Employee Monitoring
 
 ## Overview
 
-The TMS Employee Monitoring is an independently
+The Employee Monitoring is an independently
 developed web application designed to assist with employee attendance
 tracking and time management within an organizational environment.
 

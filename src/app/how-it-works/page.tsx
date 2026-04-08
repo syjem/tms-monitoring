@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'How It Works - TMS Employee Monitoring',
+  title: 'How It Works - Employee Monitoring',
 };
 
 const steps = [

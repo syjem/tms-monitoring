@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Privacy Policy - TMS Employee Monitoring',
+  title: 'Privacy Policy - Employee Monitoring',
 };
 
 export default function PrivacyPage() {
@@ -9,10 +9,10 @@ export default function PrivacyPage() {
 
       <section className="space-y-2">
         <p>
-          The TMS Employee Monitoring application (“the App”) is an
-          independently developed web application designed to assist with
-          attendance tracking, work log management, and related documentation
-          within an organizational environment.
+          The Employee Monitoring application (“the App”) is an independently
+          developed web application designed to assist with attendance tracking,
+          work log management, and related documentation within an
+          organizational environment.
         </p>
 
         <p>

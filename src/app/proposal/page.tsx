@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Proposal - TMS Employee Monitoring',
+  title: 'Proposal - Employee Monitoring',
 };
 
 export default function ProposalPage() {
@@ -24,7 +24,7 @@ export default function ProposalPage() {
           This process is repetitive, time-consuming, and prone to errors.
         </p>
         <p>
-          The TMS Employee Monitoring was built to eliminate this manual work by
+          The Employee Monitoring was built to eliminate this manual work by
           automating data extraction, work log generation, and document
           preparation — while still allowing full user control.
         </p>
@@ -51,7 +51,7 @@ export default function ProposalPage() {
       <section className="mb-10 space-y-4">
         <h2 className="text-2xl font-semibold">Proposed Solution</h2>
         <p>
-          The TMS Employee Monitoring system provides a centralized, secure web
+          The Employee Monitoring system provides a centralized, secure web
           application that automates the most tedious parts of attendance
           reporting.
         </p>
@@ -133,7 +133,7 @@ export default function ProposalPage() {
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Conclusion</h2>
         <p>
-          The TMS Employee Monitoring is a practical tool designed to improve
+          The Employee Monitoring is a practical tool designed to improve
           efficiency, accuracy, and readability of attendance reporting.
         </p>
         <p>

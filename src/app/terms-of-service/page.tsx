@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Terms of Service - TMS Employee Monitoring',
+  title: 'Terms of Service - Employee Monitoring',
 };
 
 export default function TermsPage() {
@@ -10,9 +10,9 @@ export default function TermsPage() {
       <section className="space-y-6">
         <h2 className="text-xl font-semibold">Acceptance of Terms</h2>
         <p>
-          By accessing or using the TMS Employee Monitoring application (“the
-          App”), you agree to these Terms of Service. If you do not agree, do
-          not use the App.
+          By accessing or using the Employee Monitoring application (“the App”),
+          you agree to these Terms of Service. If you do not agree, do not use
+          the App.
         </p>
 
         <h2 className="text-xl font-semibold">Purpose of the App</h2>
@@ -47,8 +47,8 @@ export default function TermsPage() {
 
         <h2 className="text-xl font-semibold">Intellectual Property</h2>
         <p>
-          The TMS Employee Monitoring application was independently developed by
-          the author. All source code, system logic, and related intellectual
+          The Employee Monitoring application was independently developed by the
+          author. All source code, system logic, and related intellectual
           property remain the property of the developer, unless explicitly
           transferred or licensed through a separate written agreement.
         </p>

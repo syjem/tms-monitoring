@@ -58,7 +58,7 @@ export default function Page() {
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-center">
                 {step === 'email' && (
-                  <React.Fragment>TMS Employee Monitoring</React.Fragment>
+                  <React.Fragment>Employee Monitoring</React.Fragment>
                 )}
               </h1>
             </div>
