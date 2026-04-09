@@ -29,7 +29,7 @@ async function HeroSection() {
           Employee Monitoring
         </h1>
         <p className="text-sm leading-6 text-muted-foreground md:text-base">
-          Upload your daily logs PDF and automate your monitoring process with
+          Upload your daily logs PDF and simplify your monitoring process with
           an AI-powered solution.
         </p>
       </div>
