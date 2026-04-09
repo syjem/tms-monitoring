@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/empty';
 import { cn } from '@/lib/utils';
 import { OperationResult } from '@/utils/with-error-handler';
-import { Plus, X } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -39,10 +39,7 @@ type Signatory = {
   includeSignature: boolean;
 };
 
-export const Signatories = ({
-  isEditable,
-  signatories,
-}: SignatoriesProps) => {
+export const Signatories = ({ isEditable, signatories }: SignatoriesProps) => {
   const signature = useSignature();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -206,7 +203,7 @@ export const Signatories = ({
           <div
             onClick={handleAddFirstSignatory}
             className={cn(
-              'group relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
+              'relative flex flex-col items-stretch max-w-1/2 px-2 md:px-8 print:px-8 py-4 transition-all rounded-sm',
               isEditable &&
                 'border-2 border-dashed border-gray-400 active:border-primary active:scale-95',
             )}
@@ -215,13 +212,13 @@ export const Signatories = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="opacity-0 group-hover:opacity-100 transition-opacity size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100"
+                className="size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100 text-muted-foreground"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemoveFirstSignatory();
                 }}
               >
-                <X />
+                <Trash2 />
               </Button>
             )}
 
@@ -277,13 +274,13 @@ export const Signatories = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="opacity-0 group-hover:opacity-100 transition-opacity size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100"
+                className="size-8 absolute -top-2 -right-2 bg-gray-50 hover:bg-gray-100 text-muted-foreground"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleRemoveSecondSignatory();
                 }}
               >
-                <X />
+                <Trash2 />
               </Button>
             )}
 
