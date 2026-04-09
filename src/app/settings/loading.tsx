@@ -18,7 +18,7 @@ export default function Loading() {
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="mb-8 text-center">
           <h1 className="mt-3 text-2xl font-bold text-gray-900 md:text-3xl">
-            Manage your Profile Settings
+            Manage your App Settings
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-gray-600 md:text-base">
             Update your signature, signatories, and monitoring defaults in one
@@ -32,13 +32,13 @@ export default function Loading() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <Signature className="size-4 text-blue-600" />
-                  <CardTitle className="text-sm font-semibold text-gray-900">
+                  <CardTitle className="font-semibold text-gray-900">
                     Signature
                   </CardTitle>
                 </div>
                 <CardDescription className="text-xs text-gray-600">
-                  Add the signature used in your monitoring sheets and signatory
-                  blocks.
+                  Update the signature used in your monitoring sheets and
+                  signatory blocks.
                 </CardDescription>
               </div>
               <CardAction>
@@ -55,7 +55,7 @@ export default function Loading() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <FilePenLine className="size-4 text-blue-600" />
-                  <CardTitle className="text-sm font-semibold text-gray-900">
+                  <CardTitle className="font-semibold text-gray-900">
                     Signatories
                   </CardTitle>
                 </div>
@@ -78,9 +78,7 @@ export default function Loading() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <Layers2 className="size-4 text-blue-600" />
-                  <p className="text-sm font-semibold text-gray-900">
-                    Defaults
-                  </p>
+                  <p className="font-semibold text-gray-900">Defaults</p>
                 </div>
                 <p className="text-xs text-gray-600">
                   Change your destination and remarks&apos; defaults.

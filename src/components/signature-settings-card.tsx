@@ -43,7 +43,7 @@ export function SignatureSettingsCard({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Signature className="size-4 text-blue-600" />
-            <CardTitle className="text-sm font-semibold text-gray-900">
+            <CardTitle className="font-semibold text-gray-900">
               Signature
             </CardTitle>
           </div>

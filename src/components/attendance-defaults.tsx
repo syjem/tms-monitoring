@@ -14,8 +14,7 @@ export function AttendanceDefaultsPanel() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { attendanceDefaults, isLoading, isFetching } =
-    useAttendanceDefaults();
+  const { attendanceDefaults, isLoading, isFetching } = useAttendanceDefaults();
 
   const handleSubmit = async (values: AttendanceDefaults) => {
     setIsSubmitting(true);
@@ -61,7 +60,7 @@ export function AttendanceDefaultsPanel() {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Layers2 className="size-4 text-blue-600" />
-            <p className="text-sm font-semibold text-gray-900">Defaults</p>
+            <p className="font-semibold text-gray-900">Defaults</p>
           </div>
           <p className="text-xs text-gray-600">
             Change your destination and remarks&apos; defaults.

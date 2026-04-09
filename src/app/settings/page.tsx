@@ -19,7 +19,7 @@ export default async function SettingsPage() {
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="mb-8 text-center">
           <h1 className="mt-3 text-2xl font-bold text-gray-900 md:text-3xl">
-            Manage your Profile Settings
+            Manage your App Settings
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-gray-600 md:text-base">
             Update your signature, signatories, and monitoring defaults in one

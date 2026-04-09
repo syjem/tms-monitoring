@@ -165,7 +165,7 @@ export function SignatoriesSettingsCard({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <FilePenLine className="size-4 text-blue-600" />
-              <CardTitle className="text-sm font-semibold text-gray-900">
+              <CardTitle className="font-semibold text-gray-900">
                 Signatories
               </CardTitle>
             </div>
