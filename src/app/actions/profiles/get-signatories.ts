@@ -10,8 +10,8 @@ export async function getSignatories() {
     const user = await getUser();
 
     const controller = new ProfilesController(db);
-    const profile = await controller.getEngineerByUserId(user.id);
-    return profile?.signatories || [];
+    const profile = await controller.getSignatoriesByUserId(user.id);
+    return profile?.signatories ?? [];
   });
 
   return result;

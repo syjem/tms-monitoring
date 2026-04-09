@@ -8,6 +8,70 @@ export class ProfilesController {
     this.db = db;
   }
 
+  async getSignatureByUserId(user_id: string) {
+    try {
+      if (!user_id) throw new Error('Missing parameter user_id!');
+      const result = await this.db
+        .select({
+          signature: profiles.signature,
+        })
+        .from(profiles)
+        .where(eq(profiles.user_id, user_id));
+
+      return result.length > 0 ? result[0] : null;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${ProfilesController.name}:${this.getSignatureByUserId.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
+
+  async getSignatoriesByUserId(user_id: string) {
+    try {
+      if (!user_id) throw new Error('Missing parameter user_id!');
+      const result = await this.db
+        .select({
+          signatories: profiles.signatories,
+        })
+        .from(profiles)
+        .where(eq(profiles.user_id, user_id));
+
+      return result.length > 0 ? result[0] : null;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${ProfilesController.name}:${this.getSignatoriesByUserId.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
+
+  async getDefaultsByUserId(user_id: string) {
+    try {
+      if (!user_id) throw new Error('Missing parameter user_id!');
+      const result = await this.db
+        .select({
+          default_destination: profiles.default_destination,
+          default_remarks: profiles.default_remarks,
+        })
+        .from(profiles)
+        .where(eq(profiles.user_id, user_id));
+
+      return result.length > 0 ? result[0] : null;
+    } catch (e) {
+      if (e instanceof Error) {
+        throw new Error(
+          `[${ProfilesController.name}:${this.getDefaultsByUserId.name}] Error: ` +
+            e?.message,
+        );
+      }
+    }
+  }
+
   async setSignature(user_id: string, data: string) {
     try {
       // update engineer signature if present otherwise add new entry
@@ -46,40 +110,6 @@ export class ProfilesController {
       if (e instanceof Error) {
         throw new Error(
           `[${ProfilesController.name}:${this.setSignature.name}] Error: ` +
-            e?.message,
-        );
-      }
-    }
-  }
-
-  /**
-   * Retrieve engineer record by the provided id
-   * @param id - engineer unique id
-   * @throws {Error} Throws an error with context if:
-   *   - The id is missing or empty
-   *   - A database operation fails
-   */
-  async getEngineerByUserId(user_id: string) {
-    try {
-      if (!user_id) throw new Error('Missing parameter user_id!');
-      const result = await this.db
-        .select({
-          id: profiles.id,
-          default_destination: profiles.default_destination,
-          default_remarks: profiles.default_remarks,
-          signatories: profiles.signatories,
-          created_at: profiles.created_at,
-          updated_at: profiles.updated_at,
-          signature: profiles.signature,
-        })
-        .from(profiles)
-        .where(eq(profiles.user_id, user_id));
-
-      return result.length > 0 ? result[0] : null;
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new Error(
-          `[${ProfilesController.name}:${this.getEngineerByUserId.name}] Error: ` +
             e?.message,
         );
       }

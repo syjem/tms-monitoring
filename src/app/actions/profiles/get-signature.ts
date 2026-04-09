@@ -10,7 +10,7 @@ export async function getEngineerSignature() {
     const user = await getUser();
 
     const controller = new ProfilesController(db);
-    const profile = await controller.getEngineerByUserId(user.id);
+    const profile = await controller.getSignatureByUserId(user.id);
 
     return profile?.signature;
   });

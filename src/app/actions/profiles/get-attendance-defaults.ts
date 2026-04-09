@@ -11,13 +11,13 @@ export async function getAttendanceDefaults() {
     const user = await getUser();
 
     const controller = new ProfilesController(db);
-    const profile = await controller.getEngineerByUserId(user.id);
+    const profile = await controller.getDefaultsByUserId(user.id);
 
     return {
       destination:
-        profile?.default_destination || FALLBACK_ATTENDANCE_DEFAULTS.destination,
-      remarks:
-        profile?.default_remarks || FALLBACK_ATTENDANCE_DEFAULTS.remarks,
+        profile?.default_destination ??
+        FALLBACK_ATTENDANCE_DEFAULTS.destination,
+      remarks: profile?.default_remarks ?? FALLBACK_ATTENDANCE_DEFAULTS.remarks,
     };
   });
 
