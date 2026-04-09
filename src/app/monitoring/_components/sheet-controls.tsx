@@ -1,7 +1,9 @@
 'use client';
 
-import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
-import { useSignature } from '@/app/monitoring/_components/signature-context';
+import {
+  useSetSignature,
+  useSignature,
+} from '@/app/monitoring/_components/signature-context';
 import SignatureMenu from '@/components/custom/signature-menu';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +11,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useQuery } from '@tanstack/react-query';
 import { Loader, Printer, Save, Signature, SquarePen } from 'lucide-react';
 import { useState } from 'react';
 
@@ -27,12 +28,8 @@ export function SheetControls({
   enableEditing,
 }: ButtonActionsProps) {
   const signature = useSignature();
+  const setSignature = useSetSignature();
   const [openSignatureDialog, setSignatureDialogState] = useState(false);
-  const { data, refetch, isFetching } = useQuery({
-    queryFn: () => getEngineerSignature(),
-    queryKey: ['engineer-signature-at-sheet-controls'],
-    refetchOnWindowFocus: false,
-  });
 
   const handlePrint = () => {
     window.print();
@@ -44,10 +41,11 @@ export function SheetControls({
         <div className="flex flex-col space-y-1">
           <Tooltip>
             <SignatureMenu
-              isFetching={isFetching}
-              data={data}
+              data={signature}
               open={openSignatureDialog}
-              refetch={refetch}
+              onSavedSignature={(signatureData) =>
+                setSignature({ success: true, data: signatureData })
+              }
               onOpenChange={setSignatureDialogState}
             >
               <TooltipTrigger asChild>

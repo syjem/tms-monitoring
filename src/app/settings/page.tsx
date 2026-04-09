@@ -29,7 +29,7 @@ export default async function SettingsPage() {
 
         <SignatureProvider signature={signature}>
           <div className="space-y-6">
-            <SignatureSettingsCard initialSignature={signature} />
+            <SignatureSettingsCard />
             <SignatoriesSettingsCard signatories={signatories} />
             <AttendanceDefaultsPanel />
           </div>

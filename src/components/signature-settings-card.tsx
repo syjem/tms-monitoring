@@ -1,7 +1,9 @@
 'use client';
 
-import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
-import type { SignatureData } from '@/app/monitoring/_components/signature-context';
+import {
+  useSetSignature,
+  useSignature,
+} from '@/app/monitoring/_components/signature-context';
 import SignatureMenu from '@/components/custom/signature-menu';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,30 +14,20 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useQuery } from '@tanstack/react-query';
 import { PenLine, Plus, Signature } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 
-type SignatureSettingsCardProps = {
-  initialSignature: SignatureData;
-};
-
-export function SignatureSettingsCard({
-  initialSignature,
-}: SignatureSettingsCardProps) {
+export function SignatureSettingsCard() {
   const [open, setOpen] = useState(false);
 
-  const { data, refetch, isFetching } = useQuery({
-    queryFn: () => getEngineerSignature(),
-    queryKey: ['engineer-signature-settings'],
-    refetchOnWindowFocus: false,
-    initialData: initialSignature,
-  });
+  const signature = useSignature();
+  const setSignature = useSetSignature();
 
   const signatureImage =
-    data?.success && typeof data.data === 'string' ? data.data : null;
+    signature?.success && typeof signature.data === 'string'
+      ? signature.data
+      : null;
 
   return (
     <Card>
@@ -56,9 +48,10 @@ export function SignatureSettingsCard({
           <SignatureMenu
             open={open}
             onOpenChange={setOpen}
-            data={data}
-            isFetching={isFetching}
-            refetch={refetch}
+            data={signature}
+            onSavedSignature={(signatureData) =>
+              setSignature({ success: true, data: signatureData })
+            }
           >
             <Button variant="outline" className="w-full">
               {signatureImage ? <PenLine /> : <Plus />}
@@ -68,9 +61,7 @@ export function SignatureSettingsCard({
         </CardAction>
       </CardHeader>
       <CardContent>
-        {isFetching && !data ? (
-          <Skeleton className="h-[220px] w-full rounded-lg" />
-        ) : signatureImage ? (
+        {signatureImage ? (
           <div className="relative h-[220px] rounded-lg border bg-muted">
             <Image
               src={signatureImage}

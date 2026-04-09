@@ -17,16 +17,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useElementSize } from '@/hooks/use-element-size';
 
 import useScreenSize from '@/hooks/use-screen-size';
 import { OperationResult } from '@/utils/with-error-handler';
 import { DialogProps } from '@radix-ui/react-dialog';
-import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { Pencil } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -35,22 +32,17 @@ type EngineerResult =
   | undefined;
 
 type SignatureMenuProps = DialogProps & {
-  isFetching: boolean;
   data: EngineerResult;
-  refetch: (
-    options?: RefetchOptions | undefined,
-  ) => Promise<QueryObserverResult<EngineerResult, Error>>;
+  onSavedSignature?: (signatureData: string) => void;
 };
 
 function SignatureMenu({
   children,
   open,
   data,
-  isFetching,
-  refetch,
+  onSavedSignature,
   ...rest
 }: SignatureMenuProps) {
-  const router = useRouter();
   const [edit, setEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const { ref, width, padding } = useElementSize<HTMLDivElement>();
@@ -77,8 +69,7 @@ function SignatureMenu({
           success: (data) => {
             if (!data.success) throw new Error(data.error.message);
 
-            refetch(); // fetch data from the database
-            router.refresh(); // refresh the page to reflect changes
+            onSavedSignature?.(signatureData); // optimistic local update in caller-owned state
             setEdit(false); // reset edit mode
             setSubmitting(false); // reset loader
 
@@ -99,7 +90,7 @@ function SignatureMenu({
         setSubmitting(false); // reset state
       }
     },
-    [refetch, router],
+    [onSavedSignature],
   );
 
   const onEditClick = useCallback(() => {
@@ -128,20 +119,13 @@ function SignatureMenu({
           <CompHeader>
             <CompTitle>My Signature</CompTitle>
             <CompDescription>
-              {isFetching
-                ? 'Loading signature details...'
-                : data?.success && data?.data
-                  ? 'Manage your signature!'
-                  : 'Create your signature here!'}
+              {data?.success && data?.data
+                ? 'Manage your signature!'
+                : 'Create your signature here!'}
             </CompDescription>
           </CompHeader>
           <div className="p-4 pt-0 md:p-0 w-full" ref={ref}>
-            {isFetching ? (
-              <div className="flex flex-col items-end">
-                <Skeleton className="w-full md:w-[500px] h-[300px]" />
-                <Skeleton className="w-[100px] h-9 mt-4" />
-              </div>
-            ) : (
+            {
               <Fragment>
                 {shouldShowCanvas ? (
                   <SignaturePad
@@ -169,7 +153,7 @@ function SignatureMenu({
                   </div>
                 )}
               </Fragment>
-            )}
+            }
           </div>
         </CompContent>
       </form>
