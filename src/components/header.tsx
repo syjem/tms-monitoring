@@ -12,6 +12,7 @@ export async function Header() {
       <nav className="max-w-4xl mx-auto flex justify-between items-center py-3 rounded border-b">
         <Link href="/" className="flex items-center gap-2 cursor-default">
           <AppLogo className="size-8" />
+          <span className="sr-only">Home</span>
         </Link>
         {user ? (
           <CurrentUserAvatar user={user} />

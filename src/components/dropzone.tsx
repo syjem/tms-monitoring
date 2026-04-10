@@ -62,7 +62,10 @@ export function Dropzone({
         ),
       })}
     >
-      <input {...getInputProps()} />
+      <label htmlFor="dropzone-input" className="sr-only">
+        Dropzone Input
+      </label>
+      <input {...getInputProps()} id="dropzone-input" />
 
       {/* Uploading Progress */}
       {loading && stage && <ExtractionAnimation stage={stage} />}

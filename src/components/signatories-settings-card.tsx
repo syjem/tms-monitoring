@@ -257,7 +257,7 @@ function SignatorySlot({
               onClick={onRemove}
               className="text-muted-foreground"
             >
-              <Trash2 />
+              <Trash2 /> <span className="sr-only">Remove Signatory</span>
             </Button>
           ) : null}
         </div>
