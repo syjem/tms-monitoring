@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentType, type RefObject } from 'react';
 
+import type { ExtractionProvider } from '@/app/actions/extract-pdf';
 import { ExtractionAnimation } from '@/components/extraction-animation';
+import { ClaudeLogo, GeminiLogo } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
@@ -21,6 +23,8 @@ export function Dropzone({
 }: {
   attendanceDefaults?: AttendanceDefaults;
 }) {
+  const [provider, setProvider] = useState<ExtractionProvider>('gemini');
+
   const {
     files,
     setFiles,
@@ -125,10 +129,35 @@ export function Dropzone({
               )}
             </div>
 
+            <div className="w-full space-y-2">
+              <div
+                role="radiogroup"
+                aria-label="Select AI provider"
+                className="grid grid-cols-2 gap-3"
+              >
+                <ProviderOptionCard
+                  value="gemini"
+                  label="Gemini"
+                  selectedValue={provider}
+                  onSelect={setProvider}
+                  disabled={loading}
+                  Logo={GeminiLogo}
+                />
+                <ProviderOptionCard
+                  value="claude"
+                  label="Claude"
+                  selectedValue={provider}
+                  onSelect={setProvider}
+                  disabled={loading}
+                  Logo={ClaudeLogo}
+                />
+              </div>
+            </div>
+
             {/* Upload Button */}
             {!loading && !hasErrors && (
               <Button
-                onClick={onExtract}
+                onClick={() => onExtract(provider)}
                 className="w-full text-white animate-in fade-in slide-in-from-bottom-2 duration-500"
               >
                 Upload
@@ -143,11 +172,62 @@ export function Dropzone({
   );
 }
 
+function ProviderOptionCard({
+  value,
+  label,
+  selectedValue,
+  onSelect,
+  disabled,
+  Logo,
+}: {
+  value: ExtractionProvider;
+  label: string;
+  selectedValue: ExtractionProvider;
+  onSelect: (provider: ExtractionProvider) => void;
+  disabled: boolean;
+  Logo: ComponentType<{ className?: string }>;
+}) {
+  const isSelected = selectedValue === value;
+
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={isSelected}
+      aria-label={label}
+      disabled={disabled}
+      onClick={(event) => {
+        event.stopPropagation();
+        onSelect(value);
+      }}
+      className={cn(
+        'flex items-center gap-3 rounded-lg border p-4 text-left transition-all',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70',
+        !disabled && 'hover:border-sky-500',
+        isSelected
+          ? 'border-sky-500 bg-sky-50 text-sky-900 shadow-sm'
+          : 'border-gray-200 bg-white text-gray-700',
+        disabled && 'cursor-not-allowed opacity-70',
+      )}
+    >
+      <div
+        className={cn(
+          'flex h-8 w-8 items-center justify-center rounded-md',
+          isSelected ? 'bg-white' : 'bg-gray-100',
+        )}
+      >
+        <Logo className="h-5 w-5" />
+      </div>
+      <span className="text-sm font-semibold">{label}</span>
+    </button>
+  );
+}
+
 function DropzoneEmptyState({
   inputRef,
   maxFileSize,
 }: {
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement>;
   maxFileSize: number;
 }) {
   const [visible, setVisible] = useState(false);

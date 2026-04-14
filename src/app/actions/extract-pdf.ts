@@ -1,12 +1,22 @@
 'use server';
 
-export async function extractTextFromPDF(file: File) {
+export type ExtractionProvider = 'gemini' | 'claude';
+
+export async function extractTextFromPDF(
+  file: File,
+  provider: ExtractionProvider,
+) {
   if (!file) {
     return { success: false, error: 'No file provided' };
   }
 
+  if (!provider) {
+    return { success: false, error: 'No provider specified' };
+  }
+
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('provider', provider);
 
   const url = 'https://api-tms-monitoring.vercel.app/api/extract';
 

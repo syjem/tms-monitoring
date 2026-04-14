@@ -1,6 +1,7 @@
 'use client';
 
 import { extractTextFromPDF } from '@/app/actions/extract-pdf';
+import type { ExtractionProvider } from '@/app/actions/extract-pdf';
 import { createLog } from '@/app/actions/logs/create-log';
 import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
 import type { AttendanceDefaults } from '@/types';
@@ -82,42 +83,45 @@ export const usePDFExtract = (options: UsePDFExtractOptions) => {
     multiple: maxFiles !== 1,
   });
 
-  const onExtract = useCallback(async () => {
-    if (files.length === 0) return;
+  const onExtract = useCallback(
+    async (provider: ExtractionProvider = 'gemini') => {
+      if (files.length === 0) return;
 
-    setLoading(true);
-    setErrors([]);
+      setLoading(true);
+      setErrors([]);
 
-    setStage('uploading');
-    await new Promise((resolve) => setTimeout(resolve, 500));
+      setStage('uploading');
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-    try {
-      setStage('extracting');
-      const result = await extractTextFromPDF(files[0]);
+      try {
+        setStage('extracting');
+        const result = await extractTextFromPDF(files[0], provider);
 
-      if (!result.success) {
-        toast.error(result.error || 'Extraction failed');
-        return;
+        if (!result.success) {
+          toast.error(result.error || 'Extraction failed');
+          return;
+        }
+
+        const period = `${result.data.from} — ${result.data.to}`;
+
+        const processedLogs = processLogs(result.data.logs, attendanceDefaults);
+
+        setStage('saving');
+        await createLog(period, processedLogs);
+      } catch (error: unknown) {
+        if (isNextRedirectError(error)) return;
+
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Something went wrong during PDF processing',
+        );
+      } finally {
+        setLoading(false);
       }
-
-      const period = `${result.data.from} — ${result.data.to}`;
-
-      const processedLogs = processLogs(result.data.logs, attendanceDefaults);
-
-      setStage('saving');
-      await createLog(period, processedLogs);
-    } catch (error: unknown) {
-      if (isNextRedirectError(error)) return;
-
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : 'Something went wrong during PDF processing',
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [attendanceDefaults, files]);
+    },
+    [attendanceDefaults, files],
+  );
 
   useEffect(() => {
     if (files.length === 0) {

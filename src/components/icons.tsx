@@ -38,7 +38,14 @@ export const AppLogo = ({ className }: { className?: string }) => {
         </linearGradient>
       </defs>
 
-      <rect x="4" y="4" width="56" height="56" rx="18" fill={`url(#${gradientId})`} />
+      <rect
+        x="4"
+        y="4"
+        width="56"
+        height="56"
+        rx="18"
+        fill={`url(#${gradientId})`}
+      />
       <rect
         x="4.75"
         y="4.75"
@@ -49,10 +56,7 @@ export const AppLogo = ({ className }: { className?: string }) => {
         strokeWidth="1.5"
       />
 
-      <path
-        d="M17 19.5h17v5H23v5.5h8.5v5H23v5.5h11v5H17z"
-        fill="#F8FAFC"
-      />
+      <path d="M17 19.5h17v5H23v5.5h8.5v5H23v5.5h11v5H17z" fill="#F8FAFC" />
       <path
         d="M36 45V19.5h4.5L46.5 30l6-10.5H57V45h-5.5V30.5l-5 8.25h-.75l-5-8.25V45z"
         fill="#F8FAFC"
@@ -117,3 +121,42 @@ export const Github = () => {
     </svg>
   );
 };
+
+export function GeminiLogo({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M12 2.5 14.5 9.5 21.5 12 14.5 14.5 12 21.5 9.5 14.5 2.5 12 9.5 9.5 12 2.5Z"
+        fill="#3B82F6"
+      />
+      <path
+        d="M12 5.25 13.75 10.25 18.75 12 13.75 13.75 12 18.75 10.25 13.75 5.25 12 10.25 10.25 12 5.25Z"
+        fill="#22D3EE"
+      />
+    </svg>
+  );
+}
+
+export function ClaudeLogo({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <circle cx="12" cy="12" r="2.2" fill="#C2410C" />
+      <path
+        d="M12 3.25V8M12 16V20.75M3.25 12H8M16 12H20.75M5.8 5.8 9.15 9.15M14.85 14.85 18.2 18.2M18.2 5.8 14.85 9.15M9.15 14.85 5.8 18.2"
+        stroke="#EA580C"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
