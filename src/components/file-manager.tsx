@@ -152,6 +152,7 @@ function FileManager({
                     <DropdownMenu>
                       <DropdownMenuTrigger>
                         <Ellipsis className="size-4" />
+                        <span className="sr-only">Open menu</span>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
