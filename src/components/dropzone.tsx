@@ -133,7 +133,7 @@ export function Dropzone({
               <div
                 role="radiogroup"
                 aria-label="Select AI provider"
-                className="grid grid-cols-2 gap-3"
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
               >
                 <ProviderOptionCard
                   value="gemini"
@@ -201,7 +201,7 @@ function ProviderOptionCard({
         onSelect(value);
       }}
       className={cn(
-        'flex items-center gap-3 rounded-lg border p-4 text-left transition-all',
+        'flex items-center gap-3 rounded-lg border p-3 text-left transition-all',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70',
         !disabled && 'hover:border-sky-500',
         isSelected
@@ -212,11 +212,11 @@ function ProviderOptionCard({
     >
       <div
         className={cn(
-          'flex h-8 w-8 items-center justify-center rounded-md',
+          'flex size-7 items-center justify-center rounded-md',
           isSelected ? 'bg-white' : 'bg-gray-100',
         )}
       >
-        <Logo className="h-5 w-5" />
+        <Logo className="h-4 w-4" />
       </div>
       <span className="text-sm font-semibold">{label}</span>
     </button>
