@@ -61,17 +61,3 @@ export type ErrorKey = keyof typeof ERRORS;
 export const getErrorMessage = (key: ErrorKey): string => {
   return ERRORS[key] || ERRORS.SOMETHING_WENT_WRONG;
 };
-
-export const TRANSIENT_AUTH_ERROR_PATTERNS = [
-  'fetch failed',
-  'network',
-  'timeout',
-  'timed out',
-  'econnreset',
-  'enotfound',
-  'eai_again',
-  'etimedout',
-  '503',
-  '502',
-  '504',
-];
