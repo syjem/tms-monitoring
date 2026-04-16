@@ -55,7 +55,7 @@ export async function extractTextFromPDF(
       method: 'POST',
       body: formData,
       headers: {
-        'x-extract-api-key': extractApiKey,
+        Authorization: `Bearer ${extractApiKey}`,
       },
     });
 
