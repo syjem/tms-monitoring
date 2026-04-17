@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState, type ComponentType, type RefObject } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
 
 import type { ExtractionProvider } from '@/app/actions/extract-pdf';
 import { ExtractionAnimation } from '@/components/extraction-animation';
-import { ClaudeLogo, GeminiLogo } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
@@ -17,6 +16,7 @@ import { cn } from '@/lib/utils';
 import type { AttendanceDefaults } from '@/types';
 import { formatBytes } from '@/utils/format-bytes';
 import { FileText, ScanLine, Upload, X } from 'lucide-react';
+import Image from 'next/image';
 
 export function Dropzone({
   attendanceDefaults,
@@ -141,15 +141,15 @@ export function Dropzone({
                   selectedValue={provider}
                   onSelect={setProvider}
                   disabled={loading}
-                  Logo={GeminiLogo}
+                  Logo="/gemini.png"
                 />
                 <ProviderOptionCard
                   value="claude"
-                  label="Claude"
+                  label="Anthropic"
                   selectedValue={provider}
                   onSelect={setProvider}
                   disabled={loading}
-                  Logo={ClaudeLogo}
+                  Logo="/anthropic.png"
                 />
               </div>
             </div>
@@ -185,7 +185,7 @@ function ProviderOptionCard({
   selectedValue: ExtractionProvider;
   onSelect: (provider: ExtractionProvider) => void;
   disabled: boolean;
-  Logo: ComponentType<{ className?: string }>;
+  Logo: string;
 }) {
   const isSelected = selectedValue === value;
 
@@ -216,7 +216,13 @@ function ProviderOptionCard({
           isSelected ? 'bg-white' : 'bg-gray-100',
         )}
       >
-        <Logo className="h-4 w-4" />
+        <Image
+          src={Logo}
+          alt={label}
+          width={16}
+          height={16}
+          className="h-4 w-4"
+        />
       </div>
       <span className="text-sm font-semibold">{label}</span>
     </button>
