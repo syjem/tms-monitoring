@@ -40,7 +40,7 @@ export async function extractTextFromPDF(
     if (!quota.allowed) {
       return {
         success: false,
-        error: `Monthly limit reached. You can only extract ${REDIS.MONTHLY_EXTRACTION_LIMIT} PDFs per month.`,
+        error: `Monthly limit reached. You can only upload ${REDIS.MONTHLY_EXTRACTION_LIMIT} PDFs per month.`,
       };
     }
 
