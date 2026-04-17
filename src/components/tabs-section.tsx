@@ -80,7 +80,7 @@ export function TabsSection() {
   const logsError = error instanceof Error ? error.message : null;
 
   return (
-    <section className="mt-6 max-w-xl mx-auto px-4">
+    <section className="mt-8 max-w-xl mx-auto px-4">
       <Tabs value={tab} onValueChange={handleTabChange}>
         <TabsList>
           <TabsTrigger
