@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'How It Works - Employee Monitoring',
+  title: 'How It Works',
 };
 
 const steps = [

@@ -1,6 +1,10 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Monitoring Sheet Not Found',
+};
+
 export default function NotFound() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">

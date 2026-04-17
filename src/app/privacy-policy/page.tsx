@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Privacy Policy - Employee Monitoring',
+  title: 'Privacy Policy',
 };
 
 export default function PrivacyPage() {

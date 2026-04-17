@@ -9,7 +9,7 @@ import { emailSchema } from '@/lib/zod/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader, Mail } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -81,12 +81,12 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
         className="w-full shadow-sm cursor-pointer"
       >
         {isLoading ? (
-          <>
+          <React.Fragment>
             <Loader className="animate-spin ml-1" />
-            Logging in...
-          </>
+            Signing in...
+          </React.Fragment>
         ) : (
-          'Log in'
+          'Sign in'
         )}
       </Button>
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-gray-300">
@@ -102,15 +102,15 @@ export function LoginForm({ onSubmit, isLoading }: EmailStepProps) {
         onClick={() => handleSocialLogin('google')}
       >
         {loadingProvider === 'google' ? (
-          <>
+          <React.Fragment>
             <Loader className="animate-spin ml-1" />
             Continuing...
-          </>
+          </React.Fragment>
         ) : (
-          <>
+          <React.Fragment>
             <Google />
             Continue with Google
-          </>
+          </React.Fragment>
         )}
       </Button>
       {error && (

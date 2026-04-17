@@ -1,4 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+export const metadata = {
+  title: 'Authentication Error',
+};
 
 export default async function Page({
   searchParams,

@@ -7,6 +7,10 @@ import { Header } from '@/components/header';
 import { SignatoriesSettingsCard } from '@/components/signatories-settings-card';
 import { SignatureSettingsCard } from '@/components/signature-settings-card';
 
+export const metadata = {
+  title: 'Settings',
+};
+
 export default async function SettingsPage() {
   const [signature, signatories] = await Promise.all([
     getEngineerSignature(),
