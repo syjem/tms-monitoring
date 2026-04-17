@@ -1,11 +1,11 @@
-import { getUserForRender } from '@/app/actions/get-user';
+import { getUserForHeader } from '@/app/actions/get-user';
 import { CurrentUserAvatar } from '@/components/current-user-avatar';
 import { AppLogo } from '@/components/icons';
 import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 
 export async function Header() {
-  const user = await getUserForRender();
+  const user = await getUserForHeader();
 
   return (
     <header className="w-full mx-auto py-4 px-4 sm:px-6 lg:px-8">
@@ -15,7 +15,7 @@ export async function Header() {
           <span className="sr-only">Home</span>
         </Link>
         {user ? (
-          <CurrentUserAvatar user={user} />
+          <CurrentUserAvatar user={user.user} remaining={user.remaining} />
         ) : (
           <Skeleton className="h-8 w-8 rounded-full" />
         )}
