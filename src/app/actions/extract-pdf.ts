@@ -6,29 +6,23 @@ import {
   checkMonthlyExtractionQuota,
   consumeMonthlyExtractionQuota,
 } from '@/lib/upstash/utils';
+import { validatePDF } from '@/utils/is-valid-pdf';
 
 export type ExtractionProvider = 'gemini' | 'claude';
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function extractTextFromPDF(
   file: File,
   provider: ExtractionProvider,
 ) {
-  if (!file) {
-    return { success: false, error: 'No file provided' };
-  }
-
   if (!provider) {
     return { success: false, error: 'No provider specified' };
   }
 
   // File Validation
-  if (!file.type.includes('pdf')) {
-    return { success: false, error: 'File must be a PDF' };
-  }
+  const result = await validatePDF(file);
 
-  if (file.size > MAX_FILE_SIZE) {
-    return { success: false, error: 'File exceeds the 5MB size limit' };
+  if (!result.valid) {
+    return { success: false, error: result.error };
   }
 
   try {
