@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { createClient } from '@/lib/supabase/client';
-import { REDIS } from '@/lib/upstash/config';
+import { CONFIG } from '@/lib/upstash/config';
 import { cn } from '@/lib/utils';
 import { User } from '@supabase/supabase-js';
 import {
@@ -89,7 +89,7 @@ export function CurrentUserAvatar({
               <span className="block ms-auto">{remaining}</span>
             ) : (
               <span className="block ms-auto">
-                {remaining}/{REDIS.MONTHLY_EXTRACTION_LIMIT}
+                {remaining}/{CONFIG.MONTHLY_LIMIT}
               </span>
             )}
           </div>
