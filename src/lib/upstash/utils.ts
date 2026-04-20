@@ -1,9 +1,9 @@
-import { REDIS } from '@/lib/upstash/config';
+import { CONFIG } from '@/lib/upstash/config';
 import { getRedisClient } from '@/lib/upstash/redis';
 
 function getCurrentMonthKey(date = new Date()): string {
   const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: REDIS.QUOTA_MONTH_TIME_ZONE,
+    timeZone: CONFIG.QUOTA_MONTH_TIME_ZONE,
     year: 'numeric',
     month: '2-digit',
   }).formatToParts(date);
@@ -21,30 +21,30 @@ function getCurrentMonthKey(date = new Date()): string {
 export async function checkMonthlyExtractionQuota(userId: string) {
   const redis = getRedisClient();
   const monthKey = getCurrentMonthKey();
-  const key = `${REDIS.EXTRACTION_QUOTA_KEY_PREFIX}:${userId}:${monthKey}`;
+  const key = `${CONFIG.PREFIX}:${userId}:${monthKey}`;
 
   const currentCount = (await redis.get<number>(key)) ?? 0;
 
   return {
     usedCount: currentCount,
-    remaining: Math.max(0, REDIS.MONTHLY_EXTRACTION_LIMIT - currentCount),
-    allowed: currentCount < REDIS.MONTHLY_EXTRACTION_LIMIT,
+    remaining: Math.max(0, CONFIG.MONTHLY_LIMIT - currentCount),
+    allowed: currentCount < CONFIG.MONTHLY_LIMIT,
   };
 }
 
 export async function consumeMonthlyExtractionQuota(userId: string) {
   const redis = getRedisClient();
   const monthKey = getCurrentMonthKey();
-  const key = `${REDIS.EXTRACTION_QUOTA_KEY_PREFIX}:${userId}:${monthKey}`;
+  const key = `${CONFIG.PREFIX}:${userId}:${monthKey}`;
 
   const usedCount = await redis.incr(key);
 
   if (usedCount === 1) {
-    await redis.expire(key, REDIS.QUOTA_KEY_TTL_SECONDS);
+    await redis.expire(key, CONFIG.QUOTA_KEY_TTL_SECONDS);
   }
 
   return {
     usedCount,
-    remaining: Math.max(0, REDIS.MONTHLY_EXTRACTION_LIMIT - usedCount),
+    remaining: Math.max(0, CONFIG.MONTHLY_LIMIT - usedCount),
   };
 }

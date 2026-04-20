@@ -1,11 +1,12 @@
 'use server';
 
 import { getUser } from '@/app/actions/get-user';
-import { REDIS } from '@/lib/upstash/config';
+import { CONFIG } from '@/lib/upstash/config';
 import {
   checkMonthlyExtractionQuota,
   consumeMonthlyExtractionQuota,
 } from '@/lib/upstash/utils';
+import { uploadPDF } from '@/lib/utils';
 import { validatePDF } from '@/utils/is-valid-pdf';
 
 export type ExtractionProvider = 'gemini' | 'claude';
@@ -34,35 +35,25 @@ export async function extractTextFromPDF(
     if (!quota.allowed) {
       return {
         success: false,
-        error: `Monthly limit reached. You can only upload ${REDIS.MONTHLY_EXTRACTION_LIMIT} PDFs per month.`,
+        error: `Monthly limit reached. You can only upload ${CONFIG.MONTHLY_LIMIT} PDFs per month.`,
       };
     }
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('provider', provider);
-
-    const url = 'https://api-tms-monitoring.vercel.app/api/extract';
     const extractApiKey = process.env.EXTRACT_API_KEY!;
 
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Authorization: `Bearer ${extractApiKey}`,
-      },
-    });
+    const result = await uploadPDF(formData, extractApiKey);
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return { success: false, error: data?.error || 'Extraction failed' };
+    if (!result.success) {
+      return { success: false, error: result.error };
     }
 
     // CONSUME quota after successful extraction
     await consumeMonthlyExtractionQuota(user.id);
 
-    return { success: true, data };
+    return { success: true, data: result.data };
   } catch (error) {
     console.error('Extraction error:', error);
     return {
