@@ -1,5 +1,5 @@
 import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
-import type { AttendanceDefaults, ApiLogData, AttendanceData } from '@/types';
+import type { ApiLogData, AttendanceData, AttendanceDefaults } from '@/types';
 import { formatDate } from '@/utils/format-date';
 import { formatTimeTo12Hour } from '@/utils/format-time';
 import { isRowHasRecords } from '@/utils/is-row-has-records';
@@ -14,8 +14,21 @@ export const processLogs = (
     const isDayOff = log.Shift === 'X' || log.Remarks === 'DAY OFF';
     const hasRecords = isRowHasRecords(log);
 
-    // Check if it's a day off - create single row group
     if (isDayOff && !hasRecords) {
+      // Day off with no work — single row
+      groupedData.push([
+        {
+          date: formatDate(log.Date),
+          day: log.Day,
+          sched: log.Shift,
+          timeIn: '',
+          timeOut: '',
+          destination: '',
+          remarks: log.Remarks,
+        },
+      ]);
+    } else if (!hasRecords) {
+      // Holiday, Absent or any other no-record day — single row
       groupedData.push([
         {
           date: formatDate(log.Date),
@@ -29,8 +42,6 @@ export const processLogs = (
       ]);
     } else {
       // Regular work day - create two-row group
-      // First row: Date, Day, Sched, TimeIn, BreakOut, Destination, Remarks, Signature
-      // Second row: "", "", "", BreakIn, TimeOut, Destination, Remarks, Signature
       groupedData.push([
         {
           date: formatDate(log.Date),
