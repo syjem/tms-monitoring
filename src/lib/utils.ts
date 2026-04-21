@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function uploadPDF(formData: FormData, extractApiKey: string) {
-  const url = 'https://api-tms-monitoring.vercel.app/api/extract';
+  const url = `${process.env.BASE_URL!}/api/extract`;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -19,8 +19,8 @@ export async function uploadPDF(formData: FormData, extractApiKey: string) {
   const data = await response.json();
 
   if (!response.ok) {
-    return { success: false, error: data?.error || 'Extraction failed' };
+    return { ok: false, error: data?.error || 'Extraction failed' };
   }
 
-  return { success: true, data };
+  return { ok: true, data };
 }

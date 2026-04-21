@@ -44,16 +44,16 @@ export async function extractTextFromPDF(
     formData.append('provider', provider);
     const extractApiKey = process.env.EXTRACT_API_KEY!;
 
-    const result = await uploadPDF(formData, extractApiKey);
+    const response = await uploadPDF(formData, extractApiKey);
 
-    if (!result.success) {
-      return { success: false, error: result.error };
+    if (!response.ok) {
+      return { success: false, error: response.error };
     }
 
     // CONSUME quota after successful extraction
     await consumeMonthlyExtractionQuota(user.id);
 
-    return { success: true, data: result.data };
+    return { success: true, data: response.data };
   } catch (error) {
     console.error('Extraction error:', error);
     return {
