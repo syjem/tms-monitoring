@@ -11,11 +11,10 @@ export const processLogs = (
   const groupedData: AttendanceData = [];
 
   logs.forEach((log) => {
-    const isDayOff = log.Shift === 'X' || log.Remarks === 'DAY OFF';
     const hasRecords = isRowHasRecords(log);
 
-    if (isDayOff && !hasRecords) {
-      // Day off with no work — single row
+    if (!hasRecords) {
+      // Day off, Holiday, Absent or any other no-record day — single row
       groupedData.push([
         {
           date: formatDate(log.Date),
@@ -24,20 +23,7 @@ export const processLogs = (
           timeIn: '',
           timeOut: '',
           destination: '',
-          remarks: log.Remarks,
-        },
-      ]);
-    } else if (!hasRecords) {
-      // Holiday, Absent or any other no-record day — single row
-      groupedData.push([
-        {
-          date: formatDate(log.Date),
-          day: log.Day,
-          sched: log.Shift,
-          timeIn: '',
-          timeOut: '',
-          destination: '',
-          remarks: log.Remarks,
+          remarks: log.Remarks || '',
         },
       ]);
     } else {
