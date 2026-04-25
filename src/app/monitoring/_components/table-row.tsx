@@ -54,7 +54,7 @@ export function CustomTableRow({
         {isEditable && isHighlighted && isFirstRowInGroup && isRowNotEmpty && (
           <Button
             size="sm"
-            className="absolute -top-[2px] left-0 md:-left-[33px] print:hidden has-[>svg]:px-2"
+            className="absolute -top-[2px] left-0 md:-left-[33px] print:hidden has-[>svg]:px-2 h-full rounded-sm"
             onClick={() => addRowToGroup(groupIndex)}
           >
             <Plus />
