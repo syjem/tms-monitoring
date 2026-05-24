@@ -1,277 +1,253 @@
 'use client';
 
-import { useEffect, useState, type RefObject } from 'react';
-
-import type { ExtractionProvider } from '@/app/actions/extract-pdf';
-import { ExtractionAnimation } from '@/components/extraction-animation';
-import { Button } from '@/components/ui/button';
+import anthropicLogo from '#public/anthropic.png';
+import geminiLogo from '#public/gemini.png';
+import { createLog } from '@/actions/logs/create';
+import { uploadPDFFile } from '@/actions/upload-pdf';
 import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-} from '@/components/ui/empty';
-import { usePDFExtract } from '@/hooks/use-pdf-extract';
+  ProviderCard,
+  type ExtractionProvider,
+} from '@/components/provider-card';
+import { Button } from '@/components/ui/button';
+import { UploadingAnimation } from '@/components/uploading-animation';
+import { AttendanceDefaults } from '@/constants/attendance-defults';
 import { cn } from '@/lib/utils';
-import type { AttendanceDefaults } from '@/types';
-import { formatBytes } from '@/utils/format-bytes';
-import { FileText, ScanLine, Upload, X } from 'lucide-react';
-import Image from 'next/image';
+import { formatFileSize } from '@/utils/format-file-size';
+import { isNextRedirectError } from '@/utils/is-next-redirect';
+import { processLogs } from '@/utils/process-logs';
+import {
+  Cancel01Icon,
+  File01Icon,
+  Upload01Icon,
+} from '@hugeicons/core-free-icons';
+import { HugeiconsIcon } from '@hugeicons/react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { toast } from 'sonner';
 
-export function Dropzone({
+const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
+type ExtractionStage = 'uploading' | 'extracting' | 'saving' | null;
+
+export default function Dropzone({
   attendanceDefaults,
 }: {
-  attendanceDefaults?: AttendanceDefaults;
+  attendanceDefaults: AttendanceDefaults;
 }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [provider, setProvider] = useState<ExtractionProvider>('gemini');
+  const [uploading, setUploading] = useState(false);
+  const [stage, setStage] = useState<ExtractionStage>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    if (!file) return;
+
+    setUploadError(null);
+    setSelectedFile(file);
+  }, []);
 
   const {
-    files,
-    setFiles,
-    loading,
-    stage,
-    onExtract,
-    maxFileSize,
     getRootProps,
     getInputProps,
-    inputRef,
     isDragActive,
-  } = usePDFExtract({
-    allowedMimeTypes: ['application/pdf'],
+    open: openFilePicker,
+  } = useDropzone({
+    accept: { 'application/pdf': ['.pdf'] },
     maxFiles: 1,
-    maxFileSize: 1000 * 1000 * 5, // 5MB
-    attendanceDefaults,
+    multiple: false,
+    maxSize: MAX_UPLOAD_SIZE,
+    noClick: true,
+    onDrop,
+    onDropRejected: (fileRejections) => {
+      const firstError = fileRejections[0]?.errors[0];
+
+      if (!firstError) {
+        setUploadError('Unable to upload file.');
+        return;
+      }
+
+      if (firstError.code === 'file-invalid-type') {
+        setUploadError('Only PDF files are allowed.');
+        return;
+      }
+
+      if (firstError.code === 'file-too-large') {
+        setUploadError('File is too large. Max size is 5 MB.');
+        return;
+      }
+
+      if (firstError.code === 'too-many-files') {
+        setUploadError('Only one file can be uploaded.');
+        return;
+      }
+
+      setUploadError(firstError.message);
+    },
   });
 
-  const file = files[0];
-  const hasErrors = file?.errors && file.errors.length > 0;
+  const handleUpload = useCallback(
+    async (provider: ExtractionProvider = 'gemini') => {
+      if (!selectedFile) return;
 
-  const handleRemoveFile = () => {
-    setFiles([]);
-    if (inputRef.current) {
-      inputRef.current.value = '';
-    }
-  };
+      setUploading(true);
+      setUploadError(null);
+      setStage('uploading');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      try {
+        setStage('extracting');
+        const result = await uploadPDFFile(selectedFile, provider);
+
+        if (!result.success) {
+          toast.error(result.error || 'Extraction failed');
+          return;
+        }
+
+        const period = `${result.data.from}/${result.data.to}`;
+        const processedLogs = processLogs(result.data.logs, attendanceDefaults);
+
+        setStage('saving');
+        await createLog(period, processedLogs);
+      } catch (error: unknown) {
+        if (isNextRedirectError(error)) return;
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Something went wrong during PDF processing',
+        );
+      } finally {
+        setUploading(false);
+        setStage(null);
+      }
+    },
+    [selectedFile, attendanceDefaults],
+  );
 
   return (
-    <div
-      {...getRootProps({
-        className: cn(
-          'relative rounded-lg border-2 border-dashed bg-white p-8 transition-all duration-500',
-          !file && 'border-gray-300 hover:border-gray-400 hover:shadow-md',
-          file && !hasErrors && !loading && 'border-gray-300',
-          loading && 'border-blue-400 bg-blue-50/50',
-          hasErrors && 'border-red-400 bg-red-50/50',
-          isDragActive && 'border-blue-400 bg-blue-50',
-        ),
-      })}
-    >
-      <label htmlFor="dropzone-input" className="sr-only">
-        Dropzone Input
-      </label>
-      <input {...getInputProps()} id="dropzone-input" />
-
-      {/* Uploading Progress */}
-      {loading && stage && <ExtractionAnimation stage={stage} />}
-
-      {/* File Display */}
-      {file ? (
-        <div
-          className={cn(
-            'transition-all duration-500',
-            file ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
-          )}
-        >
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-full flex items-center justify-between bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex items-center gap-3">
-                <div className="rounded bg-green-100 p-2">
-                  <FileText className="h-5 w-5 text-green-600" />
+    <React.Fragment>
+      {uploading && stage && <UploadingAnimation stage={stage} />}
+      <section
+        className={cn(
+          'rounded-lg border-2 border-dashed p-8 text-center motion-safe:transition-[border-color,background-color,transform,opacity] motion-safe:duration-200 motion-safe:ease-[cubic-bezier(0.23,1,0.32,1)]',
+          selectedFile
+            ? 'border-blue-300/50 bg-blue-50/30 dark:border-blue-500/40 dark:bg-blue-500/10'
+            : uploadError
+              ? 'border-red-300/50 bg-red-50/30 dark:border-red-500/40 dark:bg-red-500/10'
+              : isDragActive
+                ? 'border-emerald-300/50 bg-emerald-50/40 dark:border-emerald-500/40 dark:bg-emerald-500/10'
+                : 'border-border bg-background',
+          isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
+        )}
+      >
+        {selectedFile ? (
+          <React.Fragment>
+            <div className="w-full flex items-center justify-between gap-3 bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="flex items-start gap-3 min-w-0">
+                <div className="rounded-md border bg-primary/20 p-2 text-primary">
+                  <HugeiconsIcon
+                    icon={File01Icon}
+                    strokeWidth={2}
+                    className="size-4"
+                  />
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {file.name}
+                <div className="min-w-0">
+                  <p className="doc-subtitle truncate text-sm">
+                    {selectedFile.name}
                   </p>
-                  {hasErrors ? (
-                    <p className="text-xs text-red-600">
-                      {file.errors
-                        .map((e) =>
-                          e.message.startsWith('File is larger than')
-                            ? `File is larger than ${formatBytes(
-                                maxFileSize,
-                                2,
-                              )} (Size: ${formatBytes(file.size, 2)})`
-                            : e.message.startsWith('File type must be')
-                              ? 'File type not allowed'
-                              : e.message,
-                        )
-                        .join(', ')}
-                    </p>
-                  ) : (
-                    <p className="text-xs text-gray-500">
-                      {formatBytes(file.size, 2)}
-                    </p>
-                  )}
+                  <p className="doc-caption text-start">
+                    {formatFileSize(selectedFile.size)}
+                  </p>
                 </div>
               </div>
-              {!loading && (
-                <button
-                  onClick={handleRemoveFile}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              )}
-              {loading && (
-                <div className="text-blue-600 animate-pulse">
-                  <ScanLine className="h-5 w-5" />
-                </div>
-              )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Remove file"
+                className="motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+                onClick={() => setSelectedFile(null)}
+              >
+                <HugeiconsIcon
+                  icon={Cancel01Icon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
+              </Button>
             </div>
 
-            <div className="w-full space-y-2">
+            <div className="w-full space-y-2 mt-4">
               <div
                 role="radiogroup"
                 aria-label="Select AI provider"
                 className="grid grid-cols-1 sm:grid-cols-2 gap-3"
               >
-                <ProviderOptionCard
+                <ProviderCard
                   value="gemini"
                   label="Gemini"
                   selectedValue={provider}
                   onSelect={setProvider}
-                  disabled={loading}
-                  Logo="/gemini.png"
+                  disabled={uploading}
+                  logoSrc={geminiLogo}
                 />
-                <ProviderOptionCard
+                <ProviderCard
                   value="claude"
                   label="Anthropic"
                   selectedValue={provider}
                   onSelect={setProvider}
-                  disabled={loading}
-                  Logo="/anthropic.png"
+                  disabled={uploading}
+                  logoSrc={anthropicLogo}
                 />
               </div>
             </div>
 
-            {/* Upload Button */}
-            {!loading && !hasErrors && (
-              <Button
-                onClick={() => onExtract(provider)}
-                className="w-full text-white animate-in fade-in slide-in-from-bottom-2 duration-500"
-              >
-                Upload
-              </Button>
+            <Button
+              type="button"
+              className="mt-4 w-full text-white animate-in fade-in slide-in-from-bottom-2 duration-500"
+              onClick={() => handleUpload(provider)}
+            >
+              Upload
+            </Button>
+          </React.Fragment>
+        ) : (
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            <div className="mx-auto mb-3 flex size-10 items-center justify-center rounded-full border bg-muted">
+              <HugeiconsIcon
+                icon={Upload01Icon}
+                strokeWidth={2}
+                className="size-4"
+              />
+            </div>
+            <p className="doc-subtitle text-sm">
+              {isDragActive ? 'Drop here' : 'Drag and drop your file here'}
+            </p>
+            <p className="doc-caption mt-1">
+              PDF only, max 1 file, up to 5 MB.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-4 motion-safe:transition-transform motion-safe:duration-150 motion-safe:ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+              onClick={openFilePicker}
+            >
+              Choose File
+            </Button>
+            {uploadError && (
+              <p className="mt-3 text-xs leading-5 text-destructive">
+                {uploadError}
+              </p>
             )}
           </div>
-        </div>
-      ) : (
-        <DropzoneEmptyState inputRef={inputRef} maxFileSize={maxFileSize} />
-      )}
-    </div>
-  );
-}
-
-function ProviderOptionCard({
-  value,
-  label,
-  selectedValue,
-  onSelect,
-  disabled,
-  Logo,
-}: {
-  value: ExtractionProvider;
-  label: string;
-  selectedValue: ExtractionProvider;
-  onSelect: (provider: ExtractionProvider) => void;
-  disabled: boolean;
-  Logo: string;
-}) {
-  const isSelected = selectedValue === value;
-
-  return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={isSelected}
-      aria-label={label}
-      disabled={disabled}
-      onClick={(event) => {
-        event.stopPropagation();
-        onSelect(value);
-      }}
-      className={cn(
-        'flex items-center gap-3 rounded-lg border p-3 text-left transition-all',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70',
-        !disabled && 'hover:border-sky-500',
-        isSelected
-          ? 'border-sky-500 bg-sky-50 text-sky-900 shadow-sm'
-          : 'border-gray-200 bg-white text-gray-700',
-        disabled && 'cursor-not-allowed opacity-70',
-      )}
-    >
-      <div
-        className={cn(
-          'flex size-7 items-center justify-center rounded-md',
-          isSelected ? 'bg-white' : 'bg-gray-100',
         )}
-      >
-        <Image
-          src={Logo}
-          alt={label}
-          width={16}
-          height={16}
-          className="h-4 w-4"
-        />
-      </div>
-      <span className="text-sm font-semibold">{label}</span>
-    </button>
-  );
-}
-
-function DropzoneEmptyState({
-  inputRef,
-  maxFileSize,
-}: {
-  inputRef: RefObject<HTMLInputElement>;
-  maxFileSize: number;
-}) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setVisible(true), 100);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  return (
-    <Empty
-      className={cn(
-        'transition-all duration-500 ease-out',
-        visible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
-      )}
-    >
-      <EmptyHeader className="space-y-2">
-        <EmptyMedia variant="icon">
-          <Upload className="size-4" />
-        </EmptyMedia>
-        <EmptyDescription>
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Drag and drop or{' '}
-              <button
-                onClick={() => inputRef.current?.click()}
-                className="text-blue-600 hover:text-blue-700 underline font-medium"
-              >
-                select pdf
-              </button>{' '}
-              to upload
-            </p>
-            <p className="text-xs text-gray-700 mt-1">
-              Max file size: {formatBytes(maxFileSize, 2)}
-            </p>
-          </div>
-        </EmptyDescription>
-      </EmptyHeader>
-    </Empty>
+      </section>
+    </React.Fragment>
   );
 }

@@ -1,5 +1,5 @@
-import { BackgroundBottom } from '@/components/backgrounds';
-import { HeaderSkeleton } from '@/components/skeletons/header-skeleton';
+import { HeaderSkeleton } from '@/components/skeletons/header';
+import { BackgroundBottom } from '@/components/ui/background';
 import {
   Card,
   CardAction,
@@ -10,17 +10,18 @@ import {
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FilePenLine, Layers2, Signature } from 'lucide-react';
+import React from 'react';
 
 export default function Loading() {
   return (
-    <>
+    <React.Fragment>
       <HeaderSkeleton />
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="mb-8 text-center">
-          <h1 className="mt-3 text-2xl font-bold text-gray-900 md:text-3xl">
+          <h1 className="doc-title mt-3 text-2xl md:text-3xl">
             Manage your App Settings
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-gray-600 md:text-base">
+          <p className="doc-body mx-auto mt-3 max-w-2xl text-sm md:text-base">
             Update your signature, signatories, and monitoring defaults in one
             place.
           </p>
@@ -31,12 +32,10 @@ export default function Loading() {
             <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Signature className="size-4 text-blue-600" />
-                  <CardTitle className="font-semibold text-gray-900">
-                    Signature
-                  </CardTitle>
+                  <Signature className="size-4 text-primary" />
+                  <CardTitle className="doc-subtitle">Signature</CardTitle>
                 </div>
-                <CardDescription className="text-xs text-gray-600">
+                <CardDescription className="doc-caption">
                   Update the signature used in your monitoring sheets and
                   signatory blocks.
                 </CardDescription>
@@ -46,7 +45,7 @@ export default function Loading() {
               </CardAction>
             </CardHeader>
             <CardContent>
-              <Skeleton className="h-[220px] w-full rounded-lg" />
+              <Skeleton className="h-55 w-full rounded-lg" />
             </CardContent>
           </Card>
 
@@ -54,12 +53,10 @@ export default function Loading() {
             <CardHeader>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <FilePenLine className="size-4 text-blue-600" />
-                  <CardTitle className="font-semibold text-gray-900">
-                    Signatories
-                  </CardTitle>
+                  <FilePenLine className="size-4 text-primary" />
+                  <CardTitle className="doc-subtitle">Signatories</CardTitle>
                 </div>
-                <CardDescription className="text-xs text-gray-600">
+                <CardDescription className="doc-caption">
                   Manage the two signatory slots that appear at the bottom of
                   your monitoring sheets.
                 </CardDescription>
@@ -77,10 +74,10 @@ export default function Loading() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <Layers2 className="size-4 text-blue-600" />
-                  <p className="font-semibold text-gray-900">Defaults</p>
+                  <Layers2 className="size-4 text-primary" />
+                  <p className="doc-subtitle text-sm">Defaults</p>
                 </div>
-                <p className="text-xs text-gray-600">
+                <p className="doc-caption">
                   Change your destination and remarks&apos; defaults.
                 </p>
               </div>
@@ -90,14 +87,14 @@ export default function Loading() {
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="rounded-md border border-gray-200 bg-gray-50 p-3">
-                <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                <p className="doc-caption font-medium uppercase">
                   Destination
                 </p>
                 <Skeleton className="mt-2 h-5 w-28" />
               </div>
 
               <div className="rounded-md border border-gray-200 bg-gray-50 p-3">
-                <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                <p className="doc-caption font-medium uppercase">
                   Remarks
                 </p>
                 <Skeleton className="mt-2 h-5 w-36" />
@@ -107,7 +104,7 @@ export default function Loading() {
         </div>
       </main>
       <BackgroundBottom />
-    </>
+    </React.Fragment>
   );
 }
 
@@ -116,10 +113,10 @@ function SignatorySlotSkeleton({ label }: { label: string }) {
     <div className="rounded-xl border border-dashed border-gray-300 bg-white p-4 shadow-sm transition-colors">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+          <p className="doc-caption font-medium uppercase">
             {label}
           </p>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="doc-caption mt-1 text-sm">
             No signatory assigned yet.
           </p>
         </div>
@@ -128,7 +125,7 @@ function SignatorySlotSkeleton({ label }: { label: string }) {
         </div>
       </div>
 
-      <div className="mt-6 flex min-h-[180px] items-center justify-center rounded-lg border border-dashed bg-muted/20 px-6">
+      <div className="mt-6 flex min-h-45 items-center justify-center rounded-lg border border-dashed bg-muted/20 px-6">
         <div className="w-full space-y-3">
           <Skeleton className="h-5 w-40 mx-auto" />
           <Skeleton className="h-4 w-28 mx-auto" />

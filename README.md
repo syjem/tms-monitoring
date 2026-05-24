@@ -1,99 +1,61 @@
 # Employee Monitoring
 
-## Overview
+## Project Context
 
-The Employee Monitoring is an independently
-developed web application designed to assist with employee attendance
-tracking and time management within an organizational environment.
+This is an internal web application built to reduce manual attendance
+encoding and standardize how employee work logs are prepared, reviewed, and
+printed inside the company.
 
-It automates the process of preparing attendance sheets by extracting
-data from uploaded PDF reports, while also providing full CRUD operations
-for work logs, digital signature management, and secure user
-authentication.
+The system is not meant for public use.
 
-Instead of manually writing time-in, breaks, time-out, destinations,
-and remarks from Daily Time Records every 15-day cut-off period, users
-can upload a PDF attendance report and have the data automatically
-extracted, reviewed, and formatted into clean, printable documents.
+## What I Built and Why
 
-The system also allows users to capture and reuse digital signatures,
-ensuring consistency across documents and reducing repetitive work.
+- **AI-assisted PDF extraction**  
+  Converts uploaded attendance PDFs into structured log data to remove repetitive manual entry.
 
----
+- **Work log lifecycle management**  
+  Supports create, read, update, and delete operations for attendance records.
 
-## Why This Was Built
+- **Reusable signature and signatories profile**  
+  Stores signature/signatory defaults per user to keep generated sheets consistent and reduce repetitive setup.
 
-Every cut-off period, employees (including the author) were required to
-manually transfer attendance data from official attendance records into
-monitoring or attendance sheets. This process was repetitive,
-time-consuming, and prone to errors.
+- **Attendance sheet generation for operations use**  
+  Produces clean, printable monitoring sheets designed for practical internal handling.
 
-This project was built to eliminate that manual workload by automating
-data extraction and document preparation, while still allowing users to
-review and adjust records before final submission.
+- **Protected access with domain-aware Google auth**  
+  Uses NextAuth + Drizzle adapter with optional allowed-domain enforcement for controlled internal access.
 
----
+## Architecture Understanding
 
-## Key Features
+- **Frontend**: Next.js 16 + React 19 + TypeScript + Tailwind + shadcn/ui.
+- **Application logic**: Next.js Server Actions for log operations, profile settings, and upload orchestration.
+- **Data layer**: Neon PostgreSQL via Drizzle ORM for auth tables, profiles, and work logs.
+- **Extraction service integration**: Upload requests are forwarded to an external extraction API (`/api/extract`) with API key authorization.
+- **Quota control**: Upstash Redis enforces monthly extraction limits per user to prevent abuse and control cost.
+- **Security posture**: Authenticated routes are protected via middleware
 
-- **PDF Data Extraction**  
-  Upload attendance PDF reports and automatically extract time logs
-  using AI.
+## Operational Constraints I Accounted For
 
-- **Work Log Management**  
-  Create, read, update, and delete work logs with full user control.
-
-- **Digital Signature Capture**  
-  Capture a signature once and reuse it across future attendance
-  documents.
-
-- **Attendance Sheet Generation**  
-  Generate clean, readable, and printable attendance sheets with
-  applied signatures.
-
-- **User Authentication**  
-  Secure login and access control powered by Supabase.
-
-- **Responsive Design**  
-  Optimized for both desktop and mobile use.
-
----
+- Extraction depends on external API availability (Gemini/Anthropic provider).
+- Quota is intentionally strict (monthly cap) to guard API usage costs.
 
 ## Screenshots
 
-**Upload Tab**  
-![Upload tab](public/1.jpeg)
+**Home**  
+![Home](public/home.jpeg)
 
-**Files Tab**  
-![Files tab](public/2.jpeg)
+**Upload**  
+![Upload Action](public/home-upload.jpeg)
 
-**Edit Mode Monitoring**  
-![Edit mode monitoring](public/3.jpeg)
-
-**Ready-to-Print / Saved Mode Monitoring**  
-![Ready-to-print or saved mode monitoring](public/4.jpeg)
-
----
-
-## Intended Use
-
-This application is intended for internal evaluation and use within an
-organizational setting to improve efficiency in attendance reporting
-and documentation workflows.
-
----
-
-## Ownership
-
-This project was independently developed. Ownership, licensing, or
-transfer of rights, if any, shall be subject to separate agreement.
-
----
+**Settings Page**  
+![Settings](public/settings-page.jpeg)
 
 ## Tech Stack
 
-- **Frontend**: Next.js 15, TypeScript, Tailwind CSS, Shadcn/ui, React Query
+- **Frontend**: Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, TanStack Query
 - **Backend**: Next.js Server Actions
-- **External API**: Flask REST API with Gemini AI integration (PDF extraction)
-- **Database**: PostgreSQL (Supabase) with Drizzle ORM
+- **Database**: Neon PostgreSQL + Drizzle ORM
+- **Authentication**: NextAuth v5 (Google provider)
+- **Rate Limiting / Quota**: Upstash Redis
+- **External Service**: Flask-based extraction API (Gemini/Anthropic provider option)
 - **Deployment**: Vercel

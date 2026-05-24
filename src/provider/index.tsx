@@ -1,6 +1,7 @@
 'use client';
 
-import { NetworkStatusBanner } from '@/components/network-status-banner';
+import { NetworkStatusBanner } from '@/components/network-status';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 
@@ -10,7 +11,7 @@ function AppProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <NetworkStatusBanner />
-      {children}
+      <TooltipProvider>{children}</TooltipProvider>
     </QueryClientProvider>
   );
 }

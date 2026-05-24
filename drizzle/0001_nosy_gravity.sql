@@ -1,1 +1,0 @@
-ALTER TABLE "profiles" RENAME COLUMN "signatory_names" TO "signatories";
