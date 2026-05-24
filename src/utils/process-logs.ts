@@ -1,4 +1,4 @@
-import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defaults';
+import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defults';
 import type { ApiLogData, AttendanceData, AttendanceDefaults } from '@/types';
 import { formatDate } from '@/utils/format-date';
 import { formatTimeTo12Hour } from '@/utils/format-time';

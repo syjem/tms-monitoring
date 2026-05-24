@@ -84,4 +84,3 @@ export function useNetworkStatus() {
     isOnline: status === 'online',
   };
 }
-

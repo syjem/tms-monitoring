@@ -1,31 +1,64 @@
-import { getSignatories } from '@/app/actions/profiles/get-signatories';
-import { getEngineerSignature } from '@/app/actions/profiles/get-signature';
-import { SignatureProvider } from '@/app/monitoring/_components/signature-context';
-import { AttendanceDefaultsPanel } from '@/components/attendance-defaults';
-import { BackgroundBottom } from '@/components/backgrounds';
-import { Header } from '@/components/header';
-import { SignatoriesSettingsCard } from '@/components/signatories-settings-card';
-import { SignatureSettingsCard } from '@/components/signature-settings-card';
+import { getProfile } from '@/actions/profiles/get-profile';
+import { DefaultsPanel } from '@/app/settings/_components/defaults';
+import { SignatoriesPanel } from '@/app/settings/_components/signatories-panel';
+import { SignaturePanel } from '@/app/settings/_components/signature-panel';
+import { Header } from '@/components/shared/header';
+import { BackgroundBottom } from '@/components/ui/background';
+import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defults';
+import { SignatureProvider } from '@/contexts/signature';
+import type { AttendanceDefaults } from '@/types';
+import type { OperationResult } from '@/utils/error-handler';
+import React from 'react';
 
 export const metadata = {
   title: 'Settings',
 };
 
 export default async function SettingsPage() {
-  const [signature, signatories] = await Promise.all([
-    getEngineerSignature(),
-    getSignatories(),
-  ]);
+  const profile = await getProfile();
+
+  if (!profile.success) {
+    throw new Error(profile.error.message);
+  }
+
+  const signature: OperationResult<
+    string | null | undefined,
+    Record<string, unknown>
+  > = {
+    success: true,
+    data: profile.data?.signature,
+  };
+
+  const signatories: OperationResult<
+    {
+      id: number;
+      name: string;
+      title: string;
+      includeSignature: boolean;
+    }[],
+    Record<string, unknown>
+  > = {
+    success: true,
+    data: profile.data?.signatories ?? [],
+  };
+
+  const defaults: AttendanceDefaults = {
+    destination:
+      profile.data?.defaultDestination ??
+      FALLBACK_ATTENDANCE_DEFAULTS.destination,
+    remarks:
+      profile.data?.defaultRemarks ?? FALLBACK_ATTENDANCE_DEFAULTS.remarks,
+  };
 
   return (
-    <>
+    <React.Fragment>
       <Header />
       <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
         <section className="mb-8 text-center">
-          <h1 className="mt-3 text-2xl font-bold text-gray-900 md:text-3xl">
+          <h1 className="doc-title mt-3 text-2xl md:text-3xl">
             Manage your App Settings
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-gray-600 md:text-base">
+          <p className="doc-body mx-auto mt-3 max-w-2xl text-sm md:text-base">
             Update your signature, signatories, and monitoring defaults in one
             place.
           </p>
@@ -33,13 +66,13 @@ export default async function SettingsPage() {
 
         <SignatureProvider signature={signature}>
           <div className="space-y-6">
-            <SignatureSettingsCard />
-            <SignatoriesSettingsCard signatories={signatories} />
-            <AttendanceDefaultsPanel />
+            <SignaturePanel />
+            <SignatoriesPanel signatories={signatories} />
+            <DefaultsPanel defaults={defaults} />
           </div>
         </SignatureProvider>
       </main>
       <BackgroundBottom />
-    </>
+    </React.Fragment>
   );
 }

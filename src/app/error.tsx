@@ -1,33 +1,45 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { AlertTriangle } from 'lucide-react';
+import { useEffect } from 'react';
 
-export default function Error({
+export default function AppError({
   error,
-  reset,
+  unstable_retry,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  unstable_retry: () => void;
 }) {
-  const router = useRouter();
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="max-w-md text-center">
-        <h2 className="mb-4 text-2xl font-bold text-red-600">
-          Something went wrong!
-        </h2>
-        <p className="mb-6 text-gray-600">
-          {error.message || 'An unexpected error occurred'}
-        </p>
-        <div className="flex gap-4 justify-center">
-          <Button onClick={() => reset()}>Try again</Button>
-          <Button variant="outline" onClick={() => router.back()}>
-            Go back
-          </Button>
+    <main className="grid min-h-dvh place-items-center bg-black px-6 text-white">
+      <div className="w-full max-w-md space-y-5">
+        <AlertTriangle className="size-8 text-white/80" />
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            This page couldn&apos;t load
+          </h1>
+          <p className="text-white/65">
+            {error.message || 'A server error occurred. Reload to try again.'}
+          </p>
         </div>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => unstable_retry()}
+        >
+          Reload
+        </Button>
+        {error.digest ? (
+          <p className="pt-16 text-xs tracking-wider text-white/55">
+            ERROR {error.digest}
+          </p>
+        ) : null}
       </div>
-    </div>
+    </main>
   );
 }

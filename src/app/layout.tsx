@@ -1,8 +1,16 @@
-import { Toaster } from '@/components/ui/sonner';
+import { cn } from '@/lib/utils';
 import AppProvider from '@/provider';
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { DM_Sans, Geist, Geist_Mono, Noto_Serif } from 'next/font/google';
+import { Toaster } from 'sonner';
 import './globals.css';
+
+const notoSerifHeading = Noto_Serif({
+  subsets: ['latin'],
+  variable: '--font-heading',
+});
+
+const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -12,7 +20,6 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
-  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -27,10 +34,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html
+      lang="en"
+      className={cn(
+        'h-full',
+        'antialiased',
+        geistSans.variable,
+        geistMono.variable,
+        'font-sans',
+        dmSans.variable,
+        notoSerifHeading.variable,
+      )}
+    >
+      <body>
         <AppProvider>{children}</AppProvider>
         <Toaster position="bottom-center" richColors className="print:hidden" />
       </body>
