@@ -21,7 +21,7 @@ import {
   Upload01Icon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
 
@@ -33,17 +33,11 @@ export default function Dropzone({
 }: {
   attendanceDefaults: AttendanceDefaults;
 }) {
-  const [isVisible, setIsVisible] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [provider, setProvider] = useState<ExtractionProvider>('gemini');
   const [uploading, setUploading] = useState(false);
   const [stage, setStage] = useState<ExtractionStage>(null);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timeout);
-  }, []);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -143,7 +137,6 @@ export default function Dropzone({
               : isDragActive
                 ? 'border-emerald-300/50 bg-emerald-50/40 dark:border-emerald-500/40 dark:bg-emerald-500/10'
                 : 'border-border bg-background',
-          isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
         )}
       >
         {selectedFile ? (
