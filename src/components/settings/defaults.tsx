@@ -1,7 +1,7 @@
 'use client';
 
 import { setDefaults } from '@/actions/profiles/set-defaults';
-import { DefaultsDialog } from '@/app/settings/_components/defaults-dialog';
+import { DefaultsDialog } from '@/components/settings/defaults-dialog';
 import { Button } from '@/components/ui/button';
 import type { AttendanceDefaults } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';
@@ -82,21 +82,13 @@ export function DefaultsPanel({
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         <div className="rounded-md border border-gray-200 bg-gray-50 p-3">
-          <p className="doc-caption font-medium uppercase">
-            Destination
-          </p>
-          <p className="doc-subtitle mt-1 text-sm">
-            {defaults.destination}
-          </p>
+          <p className="doc-caption font-medium uppercase">Destination</p>
+          <p className="doc-subtitle mt-1 text-sm">{defaults.destination}</p>
         </div>
 
         <div className="rounded-md border border-gray-200 bg-gray-50 p-3">
-          <p className="doc-caption font-medium uppercase">
-            Remarks
-          </p>
-          <p className="doc-subtitle mt-1 text-sm">
-            {defaults.remarks}
-          </p>
+          <p className="doc-caption font-medium uppercase">Remarks</p>
+          <p className="doc-subtitle mt-1 text-sm">{defaults.remarks}</p>
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
-import { SheetTableHead } from '@/app/logs/_components/sheet-table-head';
-import { SheetTableRow } from '@/app/logs/_components/sheet-table-rows';
+import { SheetTableHead } from '@/components/logs/sheet-table-head';
+import { SheetTableRow } from '@/components/logs/sheet-table-rows';
 import { Table, TableBody } from '@/components/ui/table';
 import type { AttendancePageRow, AttendanceRow } from '@/types';
 import { isRowEmpty } from '@/utils/is-row-empty';

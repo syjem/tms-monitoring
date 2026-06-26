@@ -1,11 +1,12 @@
 import { getLog } from '@/actions/logs/get-log';
 import { getProfile } from '@/actions/profiles/get-profile';
-import SheetMain from '@/app/logs/_components/sheet-main';
+import SheetMain from '@/components/logs/sheet-main';
 import { LogsSheetSkeleton } from '@/components/skeletons/logs-sheet';
 import { SignatureProvider } from '@/contexts/signature';
 import { getSession } from '@/lib/get-session';
 import { OperationResult } from '@/utils/error-handler';
 import { Suspense } from 'react';
+import { validate } from 'uuid';
 
 export const metadata = {
   title: 'Monitoring Sheet',
@@ -27,6 +28,11 @@ async function LogsPageContent({
   const session = await getSession();
   const user = session.user;
   const { id } = await params;
+
+  if (!validate(id)) {
+    throw new Error('Invalid log ID');
+  }
+
   const [logs, profile] = await Promise.all([
     getLog(id, user.id),
     getProfile(user.id),

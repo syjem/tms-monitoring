@@ -1,6 +1,6 @@
 'use client';
 
-import { AutoFitInput } from '@/app/logs/_components/auto-fit-input';
+import { AutoFitInput } from '@/components/logs/auto-fit-input';
 import { Button } from '@/components/ui/button';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { useSignature } from '@/contexts/signature';

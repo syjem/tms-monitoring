@@ -1,5 +1,5 @@
-import { SheetHeader } from '@/app/logs/_components/sheet-header';
-import { SheetTableHead } from '@/app/logs/_components/sheet-table-head';
+import { SheetHeader } from '@/components/logs/sheet-header';
+import { SheetTableHead } from '@/components/logs/sheet-table-head';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 

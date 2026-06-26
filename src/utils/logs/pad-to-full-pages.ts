@@ -1,8 +1,8 @@
-import { ROWS_PER_PAGE } from '@/app/logs/_constants';
-import { cloneAttendanceData } from '@/app/logs/_utils/clone-attendance-data';
-import { countRows } from '@/app/logs/_utils/count-rows';
-import { createEmptyGroup } from '@/app/logs/_utils/create-empty-row';
+import { ROWS_PER_PAGE } from '@/constants/rows-per-page';
 import { AttendanceData } from '@/types';
+import { cloneAttendanceData } from '@/utils/logs/clone-attendance-data';
+import { countRows } from '@/utils/logs/count-rows';
+import { createEmptyGroup } from '@/utils/logs/create-empty-row';
 
 export const padToFullPages = (data: AttendanceData) => {
   const cloned = cloneAttendanceData(data);

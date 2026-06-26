@@ -1,14 +1,11 @@
 import { getProfile } from '@/actions/profiles/get-profile';
-import { DefaultsPanel } from '@/app/settings/_components/defaults';
-import { SignatoriesPanel } from '@/app/settings/_components/signatories-panel';
-import { SignaturePanel } from '@/app/settings/_components/signature-panel';
-import { Header } from '@/components/shared/header';
-import { BackgroundBottom } from '@/components/ui/background';
+import { DefaultsPanel } from '@/components/settings/defaults';
+import { SignatoriesPanel } from '@/components/settings/signatories-panel';
+import { SignaturePanel } from '@/components/settings/signature-panel';
 import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defults';
 import { SignatureProvider } from '@/contexts/signature';
 import type { AttendanceDefaults } from '@/types';
 import type { OperationResult } from '@/utils/error-handler';
-import React from 'react';
 
 export const metadata = {
   title: 'Settings',
@@ -51,28 +48,24 @@ export default async function SettingsPage() {
   };
 
   return (
-    <React.Fragment>
-      <Header />
-      <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-        <section className="mb-8 text-center">
-          <h1 className="doc-title mt-3 text-2xl md:text-3xl">
-            Manage your App Settings
-          </h1>
-          <p className="doc-body mx-auto mt-3 max-w-2xl text-sm md:text-base">
-            Update your signature, signatories, and monitoring defaults in one
-            place.
-          </p>
-        </section>
+    <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <section className="mb-8 text-center">
+        <h1 className="doc-title mt-3 text-2xl md:text-3xl w-1/2 mx-auto md:w-full">
+          Manage your App Settings
+        </h1>
+        <p className="doc-body mx-auto mt-3 max-w-2xl text-sm md:text-base">
+          Update your signature, signatories, and monitoring defaults in one
+          place.
+        </p>
+      </section>
 
-        <SignatureProvider signature={signature}>
-          <div className="space-y-6">
-            <SignaturePanel />
-            <SignatoriesPanel signatories={signatories} />
-            <DefaultsPanel defaults={defaults} />
-          </div>
-        </SignatureProvider>
-      </main>
-      <BackgroundBottom />
-    </React.Fragment>
+      <SignatureProvider signature={signature}>
+        <div className="space-y-6">
+          <SignaturePanel />
+          <SignatoriesPanel signatories={signatories} />
+          <DefaultsPanel defaults={defaults} />
+        </div>
+      </SignatureProvider>
+    </main>
   );
 }

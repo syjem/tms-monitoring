@@ -1,23 +1,19 @@
-import HeroSection from '@/components/hero-section';
-import HomeTabs from '@/components/home-tabs';
 import { Header } from '@/components/shared/header';
 import { HeaderSkeleton } from '@/components/skeletons/header';
-import HomeTabsSkeleton from '@/components/skeletons/home-tabs';
 import { BackgroundBottom } from '@/components/ui/background';
 import React, { Suspense } from 'react';
 
-export default async function Home() {
+export default function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <React.Fragment>
       <Suspense fallback={<HeaderSkeleton />}>
         <Header />
       </Suspense>
-      <main>
-        <HeroSection />
-        <Suspense fallback={<HomeTabsSkeleton />}>
-          <HomeTabs />
-        </Suspense>
-      </main>
+      {children}
       <BackgroundBottom />
     </React.Fragment>
   );

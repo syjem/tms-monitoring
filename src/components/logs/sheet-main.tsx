@@ -1,24 +1,24 @@
 'use client';
 
 import { updateLog } from '@/actions/logs/update';
-import AddPage from '@/app/logs/_components/add-page';
-import { SheetControls } from '@/app/logs/_components/sheet-controls';
-import { SheetHeader } from '@/app/logs/_components/sheet-header';
-import SheetTable from '@/app/logs/_components/sheet-table';
-import { Signatories } from '@/app/logs/_components/signatories';
-import { SignatoriesPreview } from '@/app/logs/_components/signatories-preview';
-import { ROWS_PER_PAGE } from '@/app/logs/_constants';
-import { cloneAttendanceData } from '@/app/logs/_utils/clone-attendance-data';
-import { countRows } from '@/app/logs/_utils/count-rows';
-import { countTrailingEmptySingleGroups } from '@/app/logs/_utils/count-trailing-empty-groups';
-import {
-  createEmptyGroup,
-  createEmptyRow,
-} from '@/app/logs/_utils/create-empty-row';
-import { padToFullPages } from '@/app/logs/_utils/pad-to-full-pages';
+import AddPage from '@/components/logs/add-page';
+import { SheetControls } from '@/components/logs/sheet-controls';
+import { SheetHeader } from '@/components/logs/sheet-header';
+import SheetTable from '@/components/logs/sheet-table';
+import { Signatories } from '@/components/logs/signatories';
+import { SignatoriesPreview } from '@/components/logs/signatories-preview';
+import { ROWS_PER_PAGE } from '@/constants/rows-per-page';
 import { cn } from '@/lib/utils';
 import { AttendanceData, AttendancePageRow, AttendanceRow } from '@/types';
 import { OperationResult } from '@/utils/error-handler';
+import { cloneAttendanceData } from '@/utils/logs/clone-attendance-data';
+import { countRows } from '@/utils/logs/count-rows';
+import { countTrailingEmptySingleGroups } from '@/utils/logs/count-trailing-empty-groups';
+import {
+  createEmptyGroup,
+  createEmptyRow,
+} from '@/utils/logs/create-empty-row';
+import { padToFullPages } from '@/utils/logs/pad-to-full-pages';
 import { Edit } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
