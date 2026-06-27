@@ -42,13 +42,13 @@ The system is not meant for public use.
 ## Screenshots
 
 **Home**  
-![Home](public/home.jpeg)
+![Home](public/screenshots/home.jpeg)
 
 **Upload**  
-![Upload Action](public/home-upload.jpeg)
+![Upload Action](public/screenshots/home-upload.jpeg)
 
 **Settings Page**  
-![Settings](public/settings-page.jpeg)
+![Settings](public/screenshots/settings-page.jpeg)
 
 ## Tech Stack
 
