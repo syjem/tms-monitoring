@@ -7,9 +7,9 @@ import { uploadPDFFile } from '@/actions/upload-pdf';
 import {
   ProviderCard,
   type ExtractionProvider,
-} from '@/components/provider-card';
+} from '@/components/home/provider-card';
+import { UploadingAnimation } from '@/components/home/uploading-animation';
 import { Button } from '@/components/ui/button';
-import { UploadingAnimation } from '@/components/uploading-animation';
 import { AttendanceDefaults } from '@/constants/attendance-defults';
 import { cn } from '@/lib/utils';
 import { formatFileSize } from '@/utils/format-file-size';

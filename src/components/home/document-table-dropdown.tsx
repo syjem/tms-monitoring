@@ -44,13 +44,7 @@ export default function DocumentTableDropdown({
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link
-              href={`/logs/${id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              View
-            </Link>
+            <Link href={`/logs/${id}`}>View</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={(e) => {

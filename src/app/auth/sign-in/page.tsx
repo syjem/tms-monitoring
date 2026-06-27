@@ -1,7 +1,7 @@
 import { handleSignIn } from '@/actions/auth/sign-in';
 import { AppLogo } from '@/components/shared/logo';
+import { SubmitButton } from '@/components/sign-in/submit-button';
 import { Metadata } from 'next';
-import { SignInSubmitButton } from './sign-in-submit-button';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -15,9 +15,6 @@ export default function SignInPage() {
           <AppLogo className="size-9" />
         </div>
         <div className="text-center mb-8">
-          <span className="block text-lg font-heading font-semibold tracking-tight text-foreground/80 mb-2">
-            Sign in to
-          </span>
           <h1 className="doc-title text-2xl md:text-3xl text-center">
             Employee Monitoring
           </h1>
@@ -27,7 +24,7 @@ export default function SignInPage() {
         </div>
 
         <form className="mt-6" action={handleSignIn}>
-          <SignInSubmitButton />
+          <SubmitButton />
         </form>
       </div>
     </main>

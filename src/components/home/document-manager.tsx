@@ -1,8 +1,8 @@
 'use client';
 
 import { deleteLog } from '@/actions/logs/delete';
-import DocumentTableDropdown from '@/components/document-table-dropdown';
-import { EmptyFileManager } from '@/components/empty/file-manager';
+import DocumentTableDropdown from '@/components/home/document-table-dropdown';
+import { EmptyDocumentManager } from '@/components/home/empty-document-manager';
 import { LogsLoader } from '@/components/skeletons/logs';
 
 import { Button } from '@/components/ui/button';
@@ -87,7 +87,7 @@ function DocumentsManager({
           </Button>
         </div>
       ) : logs.length === 0 ? (
-        <EmptyFileManager visible={visible} />
+        <EmptyDocumentManager visible={visible} />
       ) : (
         <div
           className={cn(

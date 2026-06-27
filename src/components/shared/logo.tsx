@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { useId } from 'react';
 
@@ -78,7 +80,7 @@ export const Google = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="2443"
-      height="2500"
+      height="2300"
       preserveAspectRatio="xMidYMid"
       viewBox="0 0 256 262"
       id="google"

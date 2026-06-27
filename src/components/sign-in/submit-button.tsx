@@ -3,11 +3,11 @@
 import { Google } from '@/components/shared/logo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Loader } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import React from 'react';
 import { useFormStatus } from 'react-dom';
 
-export function SignInSubmitButton() {
+export function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
@@ -19,14 +19,14 @@ export function SignInSubmitButton() {
     >
       {pending ? (
         <React.Fragment>
-          <Loader className="size-4 animate-spin" />
+          <Loader2 className="size-4 animate-spin" />
           Signing in...
         </React.Fragment>
       ) : (
-        <React.Fragment>
+        <span className="flex gap-4 items-center">
           <Google />
           Sign in with Google
-        </React.Fragment>
+        </span>
       )}
     </Button>
   );

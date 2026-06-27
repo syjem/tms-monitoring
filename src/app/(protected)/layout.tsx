@@ -1,4 +1,4 @@
-import { Header } from '@/components/shared/header';
+import { Header } from '@/components/header';
 import { HeaderSkeleton } from '@/components/skeletons/header';
 import { BackgroundBottom } from '@/components/ui/background';
 import React, { Suspense } from 'react';

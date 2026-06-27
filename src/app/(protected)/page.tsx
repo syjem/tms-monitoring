@@ -1,5 +1,5 @@
-import HeroSection from '@/components/hero-section';
-import HomeTabs from '@/components/home-tabs';
+import HeroSection from '@/components/home/hero-section';
+import HomeTabs from '@/components/home/home-tabs';
 import HomeTabsSkeleton from '@/components/skeletons/home-tabs';
 import { Suspense } from 'react';
 

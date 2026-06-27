@@ -13,7 +13,7 @@ export default function Loading() {
   return (
     <main className="mx-auto max-w-4xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
       <section className="mb-8 text-center">
-        <h1 className="doc-title mt-3 text-2xl md:text-3xl">
+        <h1 className="doc-title mt-3 text-2xl md:text-3xl w-1/2 mx-auto md:w-full">
           Manage your App Settings
         </h1>
         <p className="doc-body mx-auto mt-3 max-w-2xl text-sm md:text-base">

@@ -1,7 +1,7 @@
 'use client';
 
-import DocumentsManager from '@/components/document-manager';
-import Dropzone from '@/components/dropzone';
+import DocumentsManager from '@/components/home/document-manager';
+import Dropzone from '@/components/home/dropzone';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDefaults } from '@/hooks/use-defaults';
 import { getLogsQueryOptions, LOGS_QUERY_KEY, useLogs } from '@/hooks/use-logs';

@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Empty,
   EmptyDescription,
@@ -10,7 +8,7 @@ import {
 import { cn } from '@/lib/utils';
 import { CloudUpload } from 'lucide-react';
 
-export function EmptyFileManager({ visible }: { visible?: boolean }) {
+export function EmptyDocumentManager({ visible }: { visible?: boolean }) {
   return (
     <Empty
       className={cn(

@@ -1,7 +1,7 @@
 import { getUserUploadCredits } from '@/actions/get-user-upload-credits';
+import { UserAvatar } from '@/components/header/user-avatar';
 import { AppLogo } from '@/components/shared/logo';
 import { Skeleton } from '@/components/ui/skeleton';
-import { UserAvatar } from '@/components/user-avatar';
 import Link from 'next/link';
 
 export async function Header() {

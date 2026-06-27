@@ -1,4 +1,4 @@
-import Dropzone from '@/components/dropzone';
+import Dropzone from '@/components/home/dropzone';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FALLBACK_ATTENDANCE_DEFAULTS } from '@/constants/attendance-defults';
 

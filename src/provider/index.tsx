@@ -1,7 +1,7 @@
 'use client';
 
-import { NetworkStatusBanner } from '@/components/network-status';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { NetworkStatusBanner } from '@/provider/network-status';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 
