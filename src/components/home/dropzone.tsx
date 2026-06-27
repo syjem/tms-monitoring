@@ -1,7 +1,5 @@
 'use client';
 
-import anthropicLogo from '#public/anthropic.png';
-import geminiLogo from '#public/gemini.png';
 import { createLog } from '@/actions/logs/create';
 import { uploadPDFFile } from '@/actions/upload-pdf';
 import {
@@ -21,6 +19,8 @@ import {
   Upload01Icon,
 } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
+import anthropicLogo from 'public/ai-provider/anthropic.png';
+import geminiLogo from 'public/ai-provider/gemini.png';
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'sonner';
